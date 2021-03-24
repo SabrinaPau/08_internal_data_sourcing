@@ -1,21 +1,12 @@
-# Title
+# Connecting to SQL databases
 
-In this repository we will work through {}
+Helpful sites
+https://towardsdatascience.com/coding-and-implementing-a-relational-database-using-mysql-d9bc69be90f5
 
-## Objective
-As a Data Analyst it is necessary to 
+https://towardsdatascience.com/generating-random-data-into-a-database-using-python-fd2f7d54024e
 
-## Task 
+https://towardsdatascience.com/python-and-postgresql-how-to-access-a-postgresql-database-like-a-data-scientist-b5a9c5a0ea43
 
-Before we start activate your nf_base environment. 
+https://python.plainenglish.io/how-to-import-a-csv-file-into-a-mysql-database-using-python-script-791b051c5c33
 
-Please work in pairs through all the notebooks in this particular order:
-
-{}
-
-Keep in mind, you succeed better as a team. There are NO stupid questions! If you already feel comfortable with the concepts, you might even learn more from teaching them!
-
-
-**Find some help/support here**:
-
-[](links)
+https://realpython.com/python-mysql/#reading-records-using-the-select-statement
