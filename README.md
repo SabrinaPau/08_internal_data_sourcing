@@ -1,5 +1,20 @@
 # Connecting to SQL databases
 
+The configdef file will read the connection details from 'database.ini'
+Create this file with the following format:
+
+[connection_name] 
+host=<server>
+port=<port>
+user=<username>
+password=<user password>
+database=<db_to_use>
+
+for this project we use 'postgres' as the connection name. 
+Further connection details will be shared privately.
+
+
+
 Helpful sites
 https://towardsdatascience.com/coding-and-implementing-a-relational-database-using-mysql-d9bc69be90f5
 
