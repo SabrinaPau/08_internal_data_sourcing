@@ -16,7 +16,7 @@ To do so, you need to build a connection which the following Notebooks will guid
 
 The [configdef file](configdef.py) will read the connection details from 'database.ini'.  
 
-1. Create this file with the following format:
+1. Create this database.ini file with the following format:
 
 ```
 [connection_name]  
