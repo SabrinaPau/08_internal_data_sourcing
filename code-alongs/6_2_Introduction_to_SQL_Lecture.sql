@@ -292,3 +292,10 @@ ORDER BY AVG(alt) DESC;
  * Comment
 */
 
+-- Commenting out parts of your query
+SELECT faa,
+	   name,
+	   --country
+FROM airports
+/*WHERE faa LIKE 'A%'
+ORDER BY 1*/;
