@@ -60,11 +60,11 @@
  */
 
 
-/* Q9.3 What does the answer you arrived at in the question above (Q9.2) mean and how could it be explained?
+/* Q9.3 What conclusion can you derive from Q9.2 and try to come up with possible explanations.
  */
 
 
-/* Q10. What's the total number of airports FROM BENELUX countries?
+/* Q10. What's the total number of airports from BENELUX countries?
  *      Please provide the query and answer below.
  */
 
@@ -122,12 +122,12 @@ FROM airports;
  */
 
 
-/* Q19. Which plane has flown the most flights? Which airline is it belonging to, and how often was it in the air?
+/* Q19. Which plane has flown the most flights? Provide the number and the ariline it belongs to?
  *      Please provide the query and answer below.
  */
 
 
-/* Q20. How many planes have only done 1 flight in total in 2021?
+/* Q20. How many planes have flown just a single flight?
  * 		Please provide the query and answer below.
  */
 
