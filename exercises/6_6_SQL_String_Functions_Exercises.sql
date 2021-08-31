@@ -128,46 +128,38 @@ SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
  * Challenge your understanding and try to come up with the correct solution.
  * 
  * 1. How many letters does the airport with the longest name have?
- *	  Bonus: Which airport is it and where is it located?
+ *	  Which airport is it and where is it located?
  *    Please provide the query and answer below.
  */
-
 
 /* 2. The names of how many airports start with the letter 'X'?
  *    Please provide the query and answer below.
  */
 
-
-/* 3. How many airports have 'X' as the second letter in their airport code (column: faa)?
+/* 3. How many airports have the leteer 'X' as the second letter in their airport code?
  *    Please provide the query and answer below.
  */
-
 
 /* 4. Combine the 'faa' and 'name' column in the airports table so that your output looks as follows: 'faa - name'.
  *    Please provide the query below.
  */
 
-
-/* 5. How many airports have a palindrome as their airport short code (column: faa)?
+/* 5. How many airports have a palindrome as their airport code?
  *    Please provide the query and answer below.
  */
 
-
-/* 6. Return a unique list of airport countries in upper case with and cities in lowercase
+/* 6. Return all unique airport countries in upper case and cities in lowercase.
  *    Please provide the query below.
  */
 
-
-/* 7. How many airports have the first letter of the city they're located in matching with the first letter of their name?
+/* 7. In how many airports does the first letter of the city match the first letter of the airport name?
  *    Please provide the query and answer below.
  */
 
-
-/* 8. How many airports have the name of the city they're located as part of their airport name?
+/* 8. How many airport names contain the name of the city in which they are located?
  * 	  Bonus: What's the percentage compared to all airports in the list?
  *    Please provide the query and answer below.
  */
-
 
 /* 9. Perform all of the following steps in ONE query:
  *    1. Query the 'lat' and 'lon' column with only one decimal using string functions
@@ -175,7 +167,6 @@ SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
  * 	  3. Split the column into two columns called lat and lon again
  *    Please provide the query and answer below.
  */
-
 
 /* 10. Return a list of unique country names from the airports table that have 'land' in their name but NOT 'Island'.
  *	   Take this list and replace the string 'land' with 'sea'
