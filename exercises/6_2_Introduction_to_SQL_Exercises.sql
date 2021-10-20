@@ -60,7 +60,7 @@
  */
 
 
-/* Q9.3 What conclusion can you derive from Q9.2 and try to come up with possible explanations.
+/* Q9.3 What conclusion can you derive from Q9.2? Try to come up with possible explanations.
  */
 
 
@@ -122,7 +122,7 @@ FROM airports;
  */
 
 
-/* Q19. Which plane has flown the most flights? Provide the number and the ariline it belongs to?
+/* Q19. Which plane has flown the most flights? Provide the plane number and the airline it belongs to?
  *      Please provide the query and answer below.
  */
 

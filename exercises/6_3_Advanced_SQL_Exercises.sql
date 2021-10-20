@@ -98,7 +98,7 @@
  */
 
 
-/* Q8.4 They love it! Good job! Since your work has been very helpful to them, they want add more planes to the output. 
+/* Q8.4 They love it! Good job! Since your work has been very helpful to them, they want you to add more planes to the output. 
  *      Please add the following planes to your output: N206UW, N756AM, N9018E.
  * 		Hint: Make sure your window function can handle multiple planes ;)
  * 		They would like you to add an additional column to the output called net_flight_delay_cat.
