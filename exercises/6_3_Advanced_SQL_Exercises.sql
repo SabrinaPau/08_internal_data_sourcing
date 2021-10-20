@@ -1,7 +1,7 @@
 /* This file is full of practical exercises that will help you in building up your advanced SQL skills.
  */
 
-/* Q1. What country had the most departures?
+/* Q1. Which country had the most departures?
  *     Please provide the query and answer below.
  */
 
@@ -15,12 +15,12 @@
 
 
 /* Q3.1 Filter the data to January 1, 2021 and count all rows for that day so that your result set has two columns: flight_date, total_flights.  
- * 		Repeat this step, but this time only include data from January 2, 2021.
+ * 		Repeat this step in a second separate query with data from January 2, 2021.
  * 		Combine the two result sets using UNION.
  */
 
 
-/* Q3.2 Rewrite the query above so that you get the same output, but this time you are not allowed to use UNION.
+/* Q3.2 Rewrite the query from Q3.1 so that you get the same output, but this time without using UNION.
  */
 
 
@@ -55,13 +55,13 @@
 /* Q6. Which flight had the highest departure delay?
  *     How big was the delay?
  * 	   What was the plane's tail number?
- * 	   What day was it?
- * 	   Please provide the query and answer below.
+ * 	   On which day and in which city?   
+ * 	   Answer all questions with a single query.
  */
 
 
-/* Q7. What's the flight connection that covers the shortest distance?
- * 	   Please provide a list with 5 columns: 
+/* Q7. Which flight connection covers the shortest distance?
+ * 	   Please return a table with the following columns: 
  *     - origin_airport = The full name of the origin airport
  * 	   - origin_country = The country of the origin airport
  * 	   - destination_airport = The full name of the destination airport
@@ -74,12 +74,12 @@
 			  
 /* BONUS: Advanced Aggregations using Window Functions
  * Q8.1 The airline American Airlines (AA) wants you to take a look at one of their planes: N825AW
- * 		They want you to provide a list with 4 columns: flight_date, tail_number, arr_delay, acc_flight_delay.
- * 		The 'acc_flight_delay' should calculate the running sum of the arr_delay from beginning to the end of the month
- * 		The list should be sorted by the flight date starting with the earliest date
- * 		Please provide the query below and answer the following questions: 
- * 		1. How much delay time has the plane accumulated on its last day?
- * 		2. On how many days did the plane arrive earlier than scheduled (=flight delay > 0)?
+ * 		They want you to provide a table with 4 columns: flight_date, tail_number, arr_delay, acc_flight_delay.
+ * 		The 'acc_flight_delay' should be the running sum of the arr_delay from beginning to end of the month.
+ * 		The list should be sorted by the flight date starting with the earliest date.
+ * 		Please provide the query below and answer the following questions:
+ * 		1. How many minutes of delay has the plane accumulated on its last day?
+ * 		2. On how many days did the plane arrive earlier than scheduled?
  */
 
 
@@ -94,15 +94,14 @@
 
 
 /* Q8.3 American Airlines has one more request: Please summarise the previous output and provide
- * 		them with a table that has flight_date, tail_number and the sum of net_flight_delay grouped
- * 		by flight_date and tail_number.
+ * 		them with a table that shows the sum of the net_flight_delay for each day and plane.
  */
 
 
-/* Q8.4 They love it! Good job! Since your work has been very helpful to them they want to expand the output to
- * 		more planes that they own. Please add the following planes in your output: N206UW, N756AM, N9018E.
+/* Q8.4 They love it! Good job! Since your work has been very helpful to them, they want you to add more planes to the output. 
+ *      Please add the following planes to your output: N206UW, N756AM, N9018E.
  * 		Hint: Make sure your window function can handle multiple planes ;)
- * 		Additionally they would like you to add an additional column to the output called net_flight_delay_cat.
+ * 		They would like you to add an additional column to the output called net_flight_delay_cat.
  *		This column should one of five categories depending on the value of net_flight_delay.
  *		If net_flight_delay > 0 then '1-Godspeed'
  *		   net_flight_delay = 0 then '2-YOLO'
@@ -115,9 +114,8 @@
 
 
 /* Q8.5 You've been doing an amazing job, American Airlines has one last request for you:
- * 		Please summarise the previous output so that the final output groups by the tail_number
- * 		and the dep_delay_cat and aggregates the number of flights in each category in a column
- * 		called total_flights and the average flight delay in the column avg_daily_flight_delay.
+ * 		Please summarise the previous output and generate a new table that calculates the total
+ *      number of flights and average flight delay for each plane and departure delay category.
  * 		Which plane(s) managed to fly at godspeed?
  * 		Which plane(s) managed to yolo a precision landing?
  * 		How many flights ended up in the '6-WTF' category?

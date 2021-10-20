@@ -97,7 +97,6 @@ SELECT TRUNC(-5.9) AS trunc_neg_number;
  *    Please provide the answer below.
  */
 
-
 /* 2. What's the output of the following SQL statement?
  *    SELECT 1 / 2.0;
  *    Please provide the answer below.

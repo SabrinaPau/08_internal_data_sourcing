@@ -145,65 +145,53 @@ SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
  * Challenge your understanding and try to come up with the correct solution.
  *
  * 1. What's the current timestamp?
- * 	  Please provide the query below.
+ *    Please provide the query below.
  */
-
 
 /* 2. Return the current timestamp and truncate it to the current day.
  *    Please provide the query below.
  */      
 
-
-/* 3. Return the current timestamp into UNIX format. Then convert it back to timestamp.
+/* 3. Convert the current timestamp to UNIX format and back in a single query.
  *    Please provide the query below.
  */      
-
 
 /*  
  * 4.1 Query the following columns from the flights table: flight_date, origin, dest, dep_time, arr_time and air_time.
  *     Convert dep_time, arr_time into TIME variables: dep_time_f and arr_time_f 
  *     Convert air_time into an INTERVAL variable: air_time_f
- *     I want to know the travel time per flight which is the difference of dep_time_f and arr_time_f. Store the values in a new column called travel_time
+ *     Calculate the difference of dep_time_f and arr_time_f in a new column called travel_time.
  *     Please provide the query below.
  */
 
-
-/* 4.2 Now we have manually calculated the travel time. But the flights table already has a column called air_time.
- * 	   Are the two columns matching? If not, what's the percentage of matching records?
+/* 4.2 Compare the travel time with the air_time column.
+ * 	How many values are matching? Provide the number in total and percentage.
  *     Please provide the query and answer below.
  */
 
-
-/* 4.3 Strange, only a very low number of records have matching travel and air times.
- * 	   What could be the reasons for that?
+/* 4.3 Try to explain the results of 4.2.
  *     Please provide the answer below.
  */
 
-
-/* 4.4 Let's see if the time zones of the origin and destination airports have anything to do with the differences in travel and air time.
- * 	   Join the airports table and add the time zone columns to your existing table.
- * 	   Before adding them, transform them to INTERVAL and change their names to origin_tz and dest_tz.
+/* 4.4 Join the airports table and add the time zone columns to your existing table.
+ * 	Before you add them, transform them to INTERVAL and change their names to origin_tz and dest_tz.
  *     Please provide the query below.
  */
 
-
-/* 4.5 Now that whe have the time zone data, 
- * 	   1. convert the departure and arrival time to UTC and call the two new columns dep_time_f_utc and arr_time_f_utc
- * 	   2. Calculate travel_time_utc using the time zone adjusted values.
+/* 4.5 Next, convert the departure and arrival time to UTC and store them in dep_time_f_utc and arr_time_f_utc.
+ * 	Calculate the difference of the new columns and store it in a a new column travel_time_utc.
  *     Please provide the query below.
  */
 
-
-/* 4.6 Now we can compare the adjusted travel time in UTC and the air time values to check whether the time zones were causing the differences.
- * 	   What's the percentage of matching records now?
- *     Please provide the query below and answer below.
+/* 4.6 What's the percentage of matching records now?
+ *     Explain the result.
+ *     Please provide the query and answer below.
  */
 
-
-/* 4.7 Lastly, please add two columns to your table
- * 	   1. dep_timestamp_utc: this column is a timestamp that shows the date and time of the departure in UTC time zone
- *     2. arr_timestamp_utc: this column is a timestamp that shows the date and time of the arrival in UTC time zone
- *     and answer the following question: How many flights arrived after midnight UTC?
+/* 4.7 Add two columns to your table
+ * 	dep_timestamp_utc: a timestamp that shows the date and time of the departure in UTC time zone
+ *     arr_timestamp_utc: a timestamp that shows the date and time of the arrival in UTC time zone
+ *     How many flights arrived after midnight UTC?
  *     Please provide the query and answer below.
  */
 
