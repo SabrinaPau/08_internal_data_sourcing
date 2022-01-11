@@ -148,7 +148,7 @@ SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
  *    Please provide the query and answer below.
  */
 
-/* 6. Return all unique airport countries in upper case and cities in lowercase.
+/* 6. Return all unique country and cities combinations showing country name in upper case and city name in lowercase.
  *    Please provide the query below.
  */
 
