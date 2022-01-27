@@ -148,7 +148,7 @@ SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
  *    Please provide the query and answer below.
  */
 
-/* 6. Return all unique airport countries in upper case and cities in lowercase.
+/* 6. Return all unique country and cities combinations showing country name in upper case and city name in lowercase.
  *    Please provide the query below.
  */
 
@@ -163,7 +163,7 @@ SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
 
 /* 9. Perform all of the following steps in ONE query:
  *    1. Query the 'lat' and 'lon' column with only one decimal using string functions
- *    2. Merge the two columns with the new column having the structure: lat;lon
+ *    2. Merge the two columns into a new column having the structure: lat;lon
  * 	  3. Split the column into two columns called lat and lon again
  *    Please provide the query and answer below.
  */
