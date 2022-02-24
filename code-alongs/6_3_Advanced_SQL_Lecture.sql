@@ -20,33 +20,29 @@
 
 /* Joining Data
  * LEFT JOIN
- * The flights_part table has 10 flights with origin 'CPR' and 'LFT'
- * The airports_part table has 2 airports, 'GRK' and 'CPR'
+ * The flights_join table has 104 flights with origin 'CPR' and 'LFT'
+ * The airports_join table has 2 airports, 'GRK' and 'CPR'
  * Performing a left join on the origin with flights as the left and airports as the right table 
  * results in ALL flights and matching airports.
  */
-SELECT * 
-FROM airports;
-
-
-SELECT * 
-FROM flights_part AS fj;
+SELECT *
+FROM flights_join AS fj;
 
 SELECT *
-FROM airports_part AS aj;
+FROM airports_join AS aj;
 
 SELECT *
-FROM flights_part fj
-LEFT JOIN airports_part aj
+FROM flights_join fj
+LEFT JOIN airports_join aj
 	   ON fj.origin = aj.faa;
 
 /* RIGHT JOIN
  * Performing a right join on the origin with flights as the left and airports as the right table 
  * results in ALL airports with matching flights.
  */
-SELECT * 
-FROM flights_part fj
-RIGHT JOIN airports_part aj
+SELECT *
+FROM flights_join fj
+RIGHT JOIN airports_join aj
 	    ON fj.origin = aj.faa;
 
 /* INNER JOIN
@@ -54,8 +50,8 @@ RIGHT JOIN airports_part aj
  * results in flights with matching airports ONLY.
  */
 SELECT *
-FROM flights_part fj
-INNER JOIN airports_part aj
+FROM flights_join fj
+INNER JOIN airports_join aj
 	    ON fj.origin = aj.faa;
 
 /* FULL JOIN
@@ -63,20 +59,14 @@ INNER JOIN airports_part aj
  * Compared to the other joins, we have all data from both tables
  */
 SELECT *
-FROM flights_part fj
-FULL JOIN airports_part aj
+FROM flights_join fj
+FULL JOIN airports_join aj
 	   ON fj.origin = aj.faa;
 
 /* CROSS JOIN
  * Two tables are created with one column each called number. Each column has 5 rows with the numbers from 1 to 5.
  * The CROSS JOIN then combines both tables by cross combining all rows with each other.
  */
-	  
-SELECT *
-FROM flights_part fj
-CROSS JOIN airports_part aj;
-
-
 SELECT *
 FROM(
 (SELECT * FROM (VALUES (1), (2), (3), (4), (5)) AS numbers(number)) AS table1
@@ -87,24 +77,13 @@ CROSS JOIN
 /* Self Join
  * We join the airports table to itself to match airports that are located in the same city 
 */
-
-
-
 SELECT a1.name AS airport1,
 	   a2.name AS airport2,
-	   a1.city,
-	   a1.faa
-FROM airports AS a1, airports AS a2
-WHERE a1.city=a2.city 
-AND a1.faa<>a2.faa --Filter out self matches
-ORDER BY a1.name; 
-
-
-SELECT *
-FROM flights AS a1, flights AS a2
-WHERE a1.dest=a2.origin;
---AND a1.faa!=a2.faa --Filter out self matches
---ORDER BY a1.name;
+	   a1.city
+FROM airports a1, airports a2
+WHERE a1.city=a2.city
+  AND a1.faa<>a2.faa --Filter out self matches
+ORDER BY a1.name;
 
 /* UNION [ALL]
  * In this example we select all airports in Hamburg and append all airports from Berlin.
@@ -222,7 +201,7 @@ SELECT flight_date,
 	   sched_dep_time,
 	   COALESCE(dep_time, sched_dep_time) AS dep_time_clean
 FROM flights
---WHERE dep_time IS NULL;
+WHERE dep_time IS NULL;
 
 /* CAST
  * In the example below we want to extract the year from the flight_date column.
@@ -237,9 +216,6 @@ FROM flights;
 
 -- CASTing the flight_date column to type VARCHAR resolves this
 SELECT LEFT(CAST(flight_date AS VARCHAR), 4)
-FROM flights;
-
-SELECT LEFT(flight_date::VARCHAR, 4)
 FROM flights;
 
 /* Advanced Aggregation
@@ -319,10 +295,3 @@ WHERE country = 'Germany'
 ORDER BY country,
 		 city,
 		 name;
-		 
--- How to approach complex SQL queries
-
-SELECT * 
-FROM flights
-WHERE flight_date = '2021-01-04';
-
