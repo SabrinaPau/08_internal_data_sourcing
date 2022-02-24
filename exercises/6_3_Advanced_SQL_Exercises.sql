@@ -1,7 +1,23 @@
 /* This file is full of practical exercises that will help you in building up your advanced SQL skills.
  */
 
-/* Q1. Which country had the most departures?
+
+/* Q1.1 Which countries had any departures on the '2021-01-04'?
+ *     Please provide the query and answer below.
+ */ 
+
+
+/* Q1.2 Which plane had the most departures?
+ *     Please provide the query and answer below.
+ */
+
+
+/* Q1.3 What country had the most departures?
+ *     Please provide the query and answer below.
+ */
+
+
+/* Q1.4 What city had the second most arrivals?
  *     Please provide the query and answer below.
  */
 
@@ -70,6 +86,9 @@
  * 	   Remember: Only provide the flight connection with the shortest distance of all flights in the flights table.
  * 	   Please provide the query below.
  */
+
+
+
 
 			  
 /* BONUS: Advanced Aggregations using Window Functions
