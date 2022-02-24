@@ -9,8 +9,6 @@
  * 	   from the flights table.
  */
 
-SELECT *
-FROM flights;
 
 /* Q2. Select the first 20 rows of all columns in the flights table.
  */
@@ -55,16 +53,11 @@ FROM flights;
  *      Please provide the query and answer below.
  */
 
-SELECT count(*) 
-FROM flights 
-WHERE dep_time IS NULL;
 
 /* Q9.2 Out of all flights how many flights were cancelled? 
  *      Is this number equal to the number of flights that have a NULL value as their departure time above?
  *      Please provide the query and answer below.
  */
-
-
 
 
 /* Q9.3 What conclusion can you derive from Q9.2? Try to come up with possible explanations.
@@ -119,9 +112,6 @@ SELECT faa,
 	   dst
 FROM airports;
 
-SELECT *
-FROM airports;
-
 /* Q18.1 Which country has the highest number of airports?
  *       Please provide the query and answer below.
  */
@@ -140,14 +130,4 @@ FROM airports;
 /* Q20. How many planes have flown just a single flight?
  * 		Please provide the query and answer below.
  */
-SELECT * 
-FROM flights;
-
-SELECT tail_number 
-FROM flights
-GROUP BY tail_number
-HAVING count(tail_number) = 1 ;
-
-SELECT count(*)
-FROM flights f 
 
