@@ -25,61 +25,70 @@
  * Performing a left join on the origin with flights as the left and airports as the right table 
  * results in ALL flights and matching airports.
  */
-SELECT *
-FROM flights_join AS fj;
+
+SELECT * 
+FROM flights_part AS fp;
 
 SELECT *
-FROM airports_join AS aj;
+FROM airports_part AS ap;
 
 SELECT *
-FROM flights_join fj
-LEFT JOIN airports_join aj
-	   ON fj.origin = aj.faa;
+FROM flights_part fp
+LEFT JOIN airports_part ap
+	   ON fp.origin = ap.faa;
 
 /* RIGHT JOIN
  * Performing a right join on the origin with flights as the left and airports as the right table 
  * results in ALL airports with matching flights.
  */
-SELECT *
-FROM flights_join fj
-RIGHT JOIN airports_join aj
-	    ON fj.origin = aj.faa;
+SELECT * 
+FROM flights_part fp
+RIGHT JOIN airports_part ap
+	    ON fp.origin = ap.faa;
 
 /* INNER JOIN
  * Performing an inner join on the origin with flights as the left and airports as the right table 
  * results in flights with matching airports ONLY.
  */
 SELECT *
-FROM flights_join fj
-INNER JOIN airports_join aj
-	    ON fj.origin = aj.faa;
+FROM flights_part fp
+INNER JOIN airports_part ap
+	    ON fp.origin = ap.faa;
 
 /* FULL JOIN
  * All flights and all airports are returned.
  * Compared to the other joins, we have all data from both tables
  */
 SELECT *
-FROM flights_join fj
-FULL JOIN airports_join aj
-	   ON fj.origin = aj.faa;
+FROM flights_part fp
+FULL JOIN airports_part ap
+	   ON fp.origin = ap.faa;
 
 /* CROSS JOIN
  * Two tables are created with one column each called number. Each column has 5 rows with the numbers from 1 to 5.
  * The CROSS JOIN then combines both tables by cross combining all rows with each other.
- */
+ */	  
+SELECT *
+FROM flights_part fp
+CROSS JOIN airports_part ap;
+
+SELECT *
+FROM flights_part fp, airports_part ap;
+
 SELECT *
 FROM(
-(SELECT * FROM (VALUES (1), (2), (3), (4), (5)) AS numbers(number)) AS table1
-CROSS JOIN 
-(SELECT * FROM (VALUES (1), (2), (3), (4), (5)) AS numbers(number)) AS table2
+	(SELECT * FROM (VALUES (1), (2), (3), (4), (5)) AS numbers(number)) AS table1
+	CROSS JOIN 
+	(SELECT * FROM (VALUES (1), (2), (3), (4), (5)) AS numbers(number)) AS table2
 );
 
 /* Self Join
  * We join the airports table to itself to match airports that are located in the same city 
 */
-SELECT a1.name AS airport1,
-	   a2.name AS airport2,
-	   a1.city
+
+SELECT  a1.name AS airport1,
+	a2.name AS airport2,
+	a1.city
 FROM airports a1, airports a2
 WHERE a1.city=a2.city
   AND a1.faa<>a2.faa --Filter out self matches
@@ -91,8 +100,8 @@ ORDER BY a1.name;
  * one query with WHERE city IN ('Hamburg', 'Berlin')
  */
 SELECT faa,
-	   name,
-	   city
+	name,
+	city
 FROM airports
 WHERE city='Hamburg'
 UNION
@@ -293,5 +302,5 @@ SELECT country,
 FROM airports
 WHERE country = 'Germany'
 ORDER BY country,
-		 city,
-		 name;
+		city,
+		name;

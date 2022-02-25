@@ -71,7 +71,8 @@
  * 	   Please provide the query below.
  */
 
-			  
+
+
 /* BONUS: Advanced Aggregations using Window Functions
  * Q8.1 The airline American Airlines (AA) wants you to take a look at one of their planes: N825AW
  * 		They want you to provide a table with 4 columns: flight_date, tail_number, arr_delay, acc_flight_delay.

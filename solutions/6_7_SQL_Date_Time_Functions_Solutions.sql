@@ -15,7 +15,7 @@
  * 4. LOCALTIME -> time without time zone: Current time of day
  * 5. LOCALTIMESTAMP -> timestamp without time zone: Current date and time (start of current transaction);
  */
-SELECT CURRENT_DATE AS curr_date_without_zone;
+SELECT CURRENT_DATE AS curr_date_with_zone;
 SELECT CURRENT_TIME AS curr_time_with_zone;
 SELECT CURRENT_TIMESTAMP AS curr_timestamp_with_zone;
 
@@ -145,53 +145,246 @@ SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
  * Challenge your understanding and try to come up with the correct solution.
  *
  * 1. What's the current timestamp?
- *    Please provide the query below.
+ * 	  Please provide the query below.
  */
+SELECT CURRENT_TIMESTAMP;
 
 /* 2. Return the current timestamp and truncate it to the current day.
  *    Please provide the query below.
  */      
+SELECT DATE_TRUNC('day', CURRENT_TIMESTAMP);
 
-/* 3. Convert the current timestamp to UNIX format and back in a single query.
+/* 3. Return the current timestamp into UNIX format. Then convert it back to timestamp.
  *    Please provide the query below.
  */      
+SELECT EXTRACT(EPOCH FROM CURRENT_TIMESTAMP);
+SELECT TO_TIMESTAMP(EXTRACT(EPOCH FROM CURRENT_TIMESTAMP));
 
 /*  
  * 4.1 Query the following columns from the flights table: flight_date, origin, dest, dep_time, arr_time and air_time.
  *     Convert dep_time, arr_time into TIME variables: dep_time_f and arr_time_f 
  *     Convert air_time into an INTERVAL variable: air_time_f
- *     Calculate the difference of dep_time_f and arr_time_f in a new column called travel_time.
+ *     I want to know the travel time per flight which is the difference of dep_time_f and arr_time_f. Store the values in a new column called travel_time
  *     Please provide the query below.
  */
+SELECT flight_date,
+	   origin,
+	   dest,
+	   dep_time,
+       arr_time,
+       MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS dep_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) AS arr_time_f,
+       air_time,
+       MAKE_INTERVAL(mins => air_time) AS air_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) - MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS travel_time
+FROM flights AS f;
 
-/* 4.2 Compare the travel time with the air_time column.
- * 	How many values are matching? Provide the number in total and percentage.
+/* 4.2 Now we have manually calculated the travel time. But the flights table already has a column called air_time.
+ * 	   Are the two columns matching? If not, what's the percentage of matching records?
  *     Please provide the query and answer below.
  */
+SELECT (SUM((air_time_f=travel_time)::INT) * 1.0/COUNT(*) * 100)
+FROM (
+SELECT flight_date,
+	   origin,
+	   dest,
+	   dep_time,
+       arr_time,
+       MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS dep_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) AS arr_time_f,
+       air_time,
+       MAKE_INTERVAL(mins => air_time) AS air_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) - MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS travel_time
+FROM flights AS f) f
+;
 
-/* 4.3 Try to explain the results of 4.2.
+0.02%;
+
+/* 4.3 Strange, only a very low number of records have matching travel and air times.
+ * 	   What could be the reasons for that?
  *     Please provide the answer below.
  */
+-- Time zone differences
+-- air_time is more granular and only looks at liftoff and landing but not moving to lane etc.
+-- Bad data quality
 
-/* 4.4 Join the airports table and add the time zone columns to your existing table.
- * 	Before you add them, transform them to INTERVAL and change their names to origin_tz and dest_tz.
+
+/* 4.4 Let's see if the time zones of the origin and destination airports have anything to do with the differences in travel and air time.
+ * 	   Join the airports table and add the time zone columns to your existing table.
+ * 	   Before adding them, transform them to INTERVAL and change their names to origin_tz and dest_tz.
  *     Please provide the query below.
  */
+SELECT flight_date,
+	   origin,
+	   dest,
+	   MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	   dep_time,
+       arr_time,
+       MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS dep_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) AS arr_time_f,
+       air_time,
+       MAKE_INTERVAL(mins => air_time) AS air_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) - MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS travel_time
+FROM flights f
+LEFT JOIN airports AS a
+	   ON f.origin=a.faa
+LEFT JOIN airports AS a2
+	   ON f.dest=a2.faa;
 
-/* 4.5 Next, convert the departure and arrival time to UTC and store them in dep_time_f_utc and arr_time_f_utc.
- * 	Calculate the difference of the new columns and store it in a a new column travel_time_utc.
+/* 4.5 Now that whe have the time zone data, 
+ * 	   1. convert the departure and arrival time to UTC and call the two new columns dep_time_f_utc and arr_time_f_utc
+ * 	   2. Calculate travel_time_utc using the time zone adjusted values.
  *     Please provide the query below.
  */
+SELECT flight_date,
+	   origin,
+	   dest,
+	   origin_tz,
+	   dest_tz,
+	   dep_time,
+       arr_time,
+       dep_time_f,
+       arr_time_f,
+       dep_time_f - origin_tz AS dep_time_f_utc,
+       arr_time_f - dest_tz AS arr_time_f_utc,
+       air_time,
+       air_time_f,
+       travel_time,
+       (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_utc
+FROM (
+SELECT flight_date,
+	   origin,
+	   dest,
+	   MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	   dep_time,
+       arr_time,
+       MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS dep_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) AS arr_time_f,
+       air_time,
+       MAKE_INTERVAL(mins => air_time) AS air_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) - MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS travel_time
+FROM flights f
+LEFT JOIN airports AS a
+	   ON f.origin=a.faa
+LEFT JOIN airports AS a2
+	   ON f.dest=a2.faa) f;
 
-/* 4.6 What's the percentage of matching records now?
- *     Explain the result.
+/* 4.6 Now we can compare the adjusted travel time in UTC and the air time values to check whether the time zones were causing the differences.
+ * 	   What's the percentage of matching records now?
+ *     Please provide the query below and answer below.
+ */
+SELECT (SUM((air_time_f=travel_time_utc)::INT) * 1.0/COUNT(*) * 100)
+FROM (
+SELECT flight_date,
+	   origin,
+	   dest,
+	   origin_tz,
+	   dest_tz,
+	   dep_time,
+       arr_time,
+       dep_time_f,
+       arr_time_f,
+       dep_time_f - origin_tz AS dep_time_f_utc,
+       arr_time_f - dest_tz AS arr_time_f_utc,
+       air_time,
+       air_time_f,
+       travel_time,
+       (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_utc
+FROM (
+SELECT flight_date,
+	   origin,
+	   dest,
+	   MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	   dep_time,
+       arr_time,
+       MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS dep_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) AS arr_time_f,
+       air_time,
+       MAKE_INTERVAL(mins => air_time) AS air_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) - MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS travel_time
+FROM flights f
+LEFT JOIN airports AS a
+	   ON f.origin=a.faa
+LEFT JOIN airports AS a2
+	   ON f.dest=a2.faa) f) ff;
+
+0%;
+
+/* 4.7 Lastly, please add two columns to your table
+ * 	   1. dep_timestamp_utc: this column is a timestamp that shows the date and time of the departure in UTC time zone
+ *     2. arr_timestamp_utc: this column is a timestamp that shows the date and time of the arrival in UTC time zone
+ *     and answer the following question: How many flights arrived after midnight UTC?
  *     Please provide the query and answer below.
  */
+SELECT COUNT(*)
+FROM (
+SELECT flight_date,
+	   origin,
+	   dest,
+	   origin_tz,
+	   dest_tz,
+	   dep_time,
+       arr_time,
+       dep_time_f,
+       arr_time_f,
+       dep_time_f_utc,
+       arr_time_f_utc,
+       MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+					  DATE_PART('month', flight_date)::INT,
+					  DATE_PART('day', flight_date)::INT,
+					  DATE_PART('hour', dep_time_f_utc)::INT,
+					  DATE_PART('minute', dep_time_f_utc)::INT,
+					  0) AS dep_timestamp_utc,
+	   MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+					  DATE_PART('month', flight_date)::INT,
+					  CASE WHEN travel_time_utc < INTERVAL '0'
+					  	   THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
+					  	   ELSE DATE_PART('day', flight_date)::INT
+					  END,
+					  DATE_PART('hour', arr_time_f_utc)::INT,
+					  DATE_PART('minute', arr_time_f_utc)::INT,
+					  0) AS arr_timestamp_utc,
+	   air_time,
+	   air_time_f
+       travel_time,
+       travel_time_utc
+FROM (
+SELECT flight_date,
+	   origin,
+	   dest,
+	   origin_tz,
+	   dest_tz,
+	   dep_time,
+       arr_time,
+       dep_time_f,
+       arr_time_f,
+       dep_time_f - origin_tz AS dep_time_f_utc,
+       arr_time_f - dest_tz AS arr_time_f_utc,
+       air_time,
+       air_time_f,
+       travel_time,
+       (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_utc
+FROM (
+SELECT flight_date,
+	   origin,
+	   dest,
+	   MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	   dep_time,
+       arr_time,
+       MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS dep_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) AS arr_time_f,
+       air_time,
+       MAKE_INTERVAL(mins => air_time) AS air_time_f,
+       MAKE_TIME((arr_time / 100)::INT, (arr_time % 100)::INT, 0) - MAKE_TIME((dep_time / 100)::INT, (dep_time % 100)::INT, 0) AS travel_time
+FROM flights f
+LEFT JOIN airports AS a
+	   ON f.origin=a.faa
+LEFT JOIN airports AS a2
+	   ON f.dest=a2.faa) f) ff) fff
+WHERE DATE_PART('day', arr_timestamp_utc) > DATE_PART('day', dep_timestamp_utc);
 
-/* 4.7 Add two columns to your table
- * 	dep_timestamp_utc: a timestamp that shows the date and time of the departure in UTC time zone
- *     arr_timestamp_utc: a timestamp that shows the date and time of the arrival in UTC time zone
- *     How many flights arrived after midnight UTC?
- *     Please provide the query and answer below.
- */
-
+76641;
