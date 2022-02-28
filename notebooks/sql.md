@@ -1,7 +1,8 @@
-# Fill in credentials
+# Fill in credentials (as strings)
 host='________'
 port='________'
 database='____'
+schema='______'
 user='________'
 password='____'
 
