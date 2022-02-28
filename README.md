@@ -11,6 +11,9 @@ Use your terminal to navigate to your folder and run the following command:
 Activate your new environment by typing:  
 ```conda activate sql-practice```
 
+Add another module to your environment:
+```conda install -n sql-practice python-dotenv```
+
 Please work in pairs through all the notebooks in this particular order: 
 
 Keep in mind, you succeed better as a team. There are NO stupid questions! If you already feel comfortable with the concepts, you might even learn more from teaching them!
