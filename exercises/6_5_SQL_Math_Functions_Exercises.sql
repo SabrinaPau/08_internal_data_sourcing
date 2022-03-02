@@ -1,3 +1,4 @@
+integer deivision
 /* Mathematical Functions
  * In this file you will find mathematical functions that are already hard coded into postgreSQL.
  * Make sure to understand what each function takes as input, what happens to the input and what output is returned.
