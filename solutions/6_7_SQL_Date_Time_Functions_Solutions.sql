@@ -174,12 +174,12 @@ SELECT flight_date,
 	   dest,
 	   dep_time,
        arr_time,
-       MAKE_TIME((dep_time / 100)::INT, (dep_time::INT % 100)::INT, 0) AS dep_time_f,
-       MAKE_TIME((dep_time / 100)::INT, (dep_time::INT % 100)::INT, 0) AS dep_time_f,
-       MAKE_TIME((arr_time / 100)::INT, (arr_time::INT % 100)::INT, 0) AS arr_time_f,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        air_time,
        MAKE_INTERVAL(mins => air_time::INT) AS air_time_f,
-       MAKE_TIME((arr_time / 100)::INT, (arr_time::INT % 100)::INT, 0) - MAKE_TIME((dep_time / 100)::INT, (dep_time::INT % 100)::INT, 0) AS travel_time
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time
 FROM flights AS f;
 
 /* 4.2 Now we have manually calculated the travel time. But the flights table already has a column called air_time.
@@ -193,15 +193,15 @@ SELECT flight_date,
 	   dest,
 	   dep_time,
        arr_time,
-       MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) AS arr_time_f,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        air_time,
        MAKE_INTERVAL(mins => air_time::INT) AS air_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) - MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS travel_time
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time
 FROM flights AS f) f
 ;
 
-0.02%;
+0.0147%;
 
 /* 4.3 Strange, only a very low number of records have matching travel and air times.
  * 	   What could be the reasons for that?
@@ -224,11 +224,11 @@ SELECT flight_date,
 	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
 	   dep_time,
        arr_time,
-       MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) AS arr_time_f,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        air_time,
        MAKE_INTERVAL(mins => air_time::INT) AS air_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) - MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS travel_time
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time
 FROM flights f
 LEFT JOIN airports AS a
 	   ON f.origin=a.faa
@@ -263,11 +263,11 @@ SELECT flight_date,
 	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
 	   dep_time,
        arr_time,
-       MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) AS arr_time_f,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        air_time,
        MAKE_INTERVAL(mins => air_time::INT) AS air_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) - MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS travel_time
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time
 FROM flights f
 LEFT JOIN airports AS a
 	   ON f.origin=a.faa
@@ -303,11 +303,11 @@ SELECT flight_date,
 	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
 	   dep_time,
        arr_time,
-       MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) AS arr_time_f,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        air_time,
        MAKE_INTERVAL(mins => air_time::INT) AS air_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) - MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS travel_time
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time
 FROM flights f
 LEFT JOIN airports AS a
 	   ON f.origin=a.faa
@@ -378,11 +378,11 @@ SELECT flight_date,
 	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
 	   dep_time,
        arr_time,
-       MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) AS arr_time_f,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        air_time,
        MAKE_INTERVAL(mins => air_time::INT) AS air_time_f,
-       MAKE_TIME((arr_time::INT / 100)::INT, (arr_time::INT % 100)::INT, 0) - MAKE_TIME((dep_time::INT / 100)::INT, (dep_time::INT % 100)::INT, 0) AS travel_time
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time
 FROM flights f
 LEFT JOIN airports AS a
 	   ON f.origin=a.faa
@@ -390,4 +390,4 @@ LEFT JOIN airports AS a2
 	   ON f.dest=a2.faa) f) ff) fff
 WHERE DATE_PART('day', arr_timestamp_utc) > DATE_PART('day', dep_timestamp_utc);
 
-76641;
+52596;
