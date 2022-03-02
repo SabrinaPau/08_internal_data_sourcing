@@ -1,5 +1,7 @@
 # database details
-**notebooks/sql.py
+# notebooks/sql.py
+# notebooks/sql.md
+notebooks/.env
 
 # Data
 data/
