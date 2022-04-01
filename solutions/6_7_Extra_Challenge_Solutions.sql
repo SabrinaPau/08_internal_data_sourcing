@@ -94,7 +94,7 @@ SELECT flight_date,
 FROM flights_all AS f) f;
 ==> 49.44%;
 
-/* 2.3 Try to explain the results of 5.2.
+/* 2.3 Try to explain the results of 2.2.
  *     Please provide the answer below.
  */
 
@@ -209,16 +209,11 @@ LEFT JOIN airports AS a2
 
 -- we got the new matches due to the harmonization of time values with different timezones
 	  
-/* Extra Credit: 2.7 Until now, we achieved a match rate of nearly 84%
- * 					 1. Do you have any ideas how to increase the match rate any further?
- *  				 2. Create a query and confirm your ideas.  
- */
-	  
-/* Extra Credit: 3 Add two columns to your table
- * 				   dep_timestamp_utc: a timestamp that shows the date and time of the departure in UTC time zone
- *     			   arr_timestamp_utc: a timestamp that shows the date and time of the arrival in UTC time zone
- *     			   How many flights arrived after midnight UTC?
- *     			   Please provide the query and answer below.
+/* Extra Credit: 2.7 Add two columns to your table
+ * 				   	 dep_timestamp_utc: a timestamp that shows the date and time of the departure in UTC time zone
+ *     			   	 arr_timestamp_utc: a timestamp that shows the date and time of the arrival in UTC time zone
+ *     			   	 How many flights arrived after midnight UTC?
+ *     			   	 Please provide the query and answer below.
  */
 
 SELECT COUNT(*)
@@ -290,3 +285,9 @@ LEFT JOIN airports AS a2
 WHERE DATE_PART('day', arr_timestamp_utc) > DATE_PART('day', dep_timestamp_utc);
 
 ==> 52596;
+
+
+/* Extra Credit: 2.8 Until now, we achieved a match rate of nearly 84%
+ * 					 1. Do you have any ideas how to increase the match rate any further?
+ *  				 2. Create a query and confirm your ideas.  
+ */
