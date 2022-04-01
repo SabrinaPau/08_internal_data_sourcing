@@ -21,9 +21,9 @@ LIMIT 100;
 
 /*  
  * 1.2 And now, let's take a closer look at some particular relevant columns and make sure we fully understand these values.
- * 	   What do the values in arr_time, dep_time really and actual_elapsed_time mean?
- * 	   Retrieve all unique values from these columns(in three queries) and order them in an descending order.
- *     Remember, retrieve as much data you need - not more and not less.
+ * 	   What do the values in arr_time, dep_time and actual_elapsed_time really mean?
+ * 	   Retrieve all unique values from these columns(in three queries) and order them in descending order.
+ *     Remember, retrieve as much data as you need - not more and not less.
  * 	   Please provide the query below.
  */
 
