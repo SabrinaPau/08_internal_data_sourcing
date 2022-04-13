@@ -223,12 +223,15 @@ ORDER BY alt;
 SELECT name, 
 	   city, 
 	   country,
-	   alt AS altitude_in_m,
-	   ROUND(alt / 1000.0, 1) AS altitude_in_km
+	   alt AS altitude_in_feet,
+	   ROUND(alt/3.281) AS altitude_in_m,
+	   ROUND((alt/3.281) / 1000.0, 1) AS altitude_in_km
 FROM airports
 WHERE alt >= 12400
-  AND (country = 'China' OR country = 'Nepal')
-  
+  AND (country = 'China' OR country = 'Nepal');
+
+--
+
 -- Modulo
 SELECT (11 % 2) AS modulo;
 
