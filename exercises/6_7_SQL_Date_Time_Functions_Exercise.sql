@@ -7,7 +7,7 @@
  */
 
 /* Current Date/Time
- * PostgreSQL provides a number of functions that all retrun values based on the start time of the current transaction.
+ * PostgreSQL provides a number of functions that all return values based on the start time of the current transaction.
  * This means, that during the transaction, their values do not change.
  * 1. CURRENT_DATE -> date: Current date
  * 2. CURRENT_TIME -> time with time zone: Current time of day
@@ -15,6 +15,7 @@
  * 4. LOCALTIME -> time without time zone: Current time of day
  * 5. LOCALTIMESTAMP -> timestamp without time zone: Current date and time (start of current transaction);
  */
+
 SELECT CURRENT_DATE AS curr_date_without_zone;
 SELECT CURRENT_TIME AS curr_time_with_zone;
 SELECT CURRENT_TIMESTAMP AS curr_timestamp_with_zone;
@@ -22,28 +23,38 @@ SELECT CURRENT_TIMESTAMP AS curr_timestamp_with_zone;
 SELECT LOCALTIME AS local_time_no_zone;
 SELECT LOCALTIMESTAMP AS local_time_no_zone;
  
-/* PostgreSQL also provides functions that return the start time of the current statement, as well as the actual current time at the instant the function is called.
- * 6. TRANSACTION_TIMESTAMP() -> timestamp with time zone: Current date and time (start of current transaction) - equivalent to CURRENT_TIMESTAMP
+/* PostgreSQL also provides functions that return the start time of the current statement, 
+ * as well as the actual current time at the instant the function is called.
+ * 6. TRANSACTION_TIMESTAMP() -> timestamp with time zone: Current date and time 
+ * (start of current transaction) - equivalent to CURRENT_TIMESTAMP
  * 7. STATEMENT_TIMESTAMP() -> timestamp with time zone: Current date and time (start of current statement);
  * 8. CLOCK_TIMESTAMP() -> timestamp with time zone: Current date and time (changes during statement execution);
  * 9. TIMEOFDAY() -> text: Current date and time (like clock_timestamp, but as a text string)
- * 10. NOW() -> timestamp with time zone: Current date and time (start of current transaction) - equivalent to transaction_timestamp()
+ * 10. NOW() -> timestamp with time zone: Current date and time (start of current transaction) 
+ * - equivalent to transaction_timestamp()
  */
+
 SELECT TRANSACTION_TIMESTAMP() AS transaction_timestamp_with_zone;
 SELECT STATEMENT_TIMESTAMP() AS statement_timestamp_with_zone;
 SELECT CLOCK_TIMESTAMP() AS clock;
 SELECT TIMEOFDAY() AS current_date_time_string;
 SELECT NOW() AS current_date_time_with_zone;
 
-
 /* Date/Time creation
  * 1. make_date(year int, month int, day int) -> date: Create date from year, month and day fields
- * 2. make_interval(years int DEFAULT 0, months int DEFAULT 0, weeks int DEFAULT 0, days int DEFAULT 0, hours int DEFAULT 0, mins int DEFAULT 0, secs double precision DEFAULT 0.0) -> interval: Create interval from years, months, weeks, days, hours, minutes and seconds fields
+ * 2. make_interval(years int DEFAULT 0, months int DEFAULT 0, weeks int DEFAULT 0, days int DEFAULT 0, 
+ * hours int DEFAULT 0, mins int DEFAULT 0, secs double precision DEFAULT 0.0) -> interval: Create interval 
+ * from years, months, weeks, days, hours, minutes and seconds fields
  * 3. make_time(hour int, min int, sec double precision) -> time: Create time from hour, minute and seconds fields
- * 4. make_timestamp(year int, month int, day int, hour int, min int, sec double precision) -> timestamp: Create timestamp from year, month, day, hour, minute and seconds fields
- * 5. make_timestamptz(year int, month int, day int, hour int, min int, sec double precision, [ timezone text ]) -> timestamp with time zone: Create timestamp with time zone from year, month, day, hour, minute and seconds fields; if timezone is not specified, the current time zone is used
- * 6. to_timestamp(double precision) -> timestamp with time zone: Convert Unix epoch (seconds since 1970-01-01 00:00:00+00) to timestamp
+ * 4. make_timestamp(year int, month int, day int, hour int, min int, sec double precision) -> 
+ * timestamp: Create timestamp from year, month, day, hour, minute and seconds fields
+ * 5. make_timestamptz(year int, month int, day int, hour int, min int, sec double precision, 
+ * [ timezone text ]) -> timestamp with time zone: Create timestamp with time zone from year, month, day, hour, 
+ * minute and seconds fields; if timezone is not specified, the current time zone is used
+ * 6. to_timestamp(double precision) -> timestamp with time zone: Convert Unix epoch 
+ * (seconds since 1970-01-01 00:00:00+00) to timestamp
  */
+
 SELECT MAKE_DATE(2021, 1, 1) AS new_date;
 
 SELECT MAKE_INTERVAL(years => 10) AS ten_years_interval;
@@ -66,9 +77,12 @@ SELECT TO_TIMESTAMP(1609497000) AS from_unix_to_timestamp;
  * 	  b) extract(field from interval) -> double precision: Get subfield
  * 2. a) date_part(text, timestamp) -> double precision: Get subfield (equivalent to extract)
  *    b) date_part(text, interval) -> double precision: Get subfield (equivalent to extract)
- * A full list of accepted values for field/text can be found here: https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-EXTRACT
- * Both functions are the same. The extract function complies with SQL standard, while date_part is as Postgres specific function.
+ * A full list of accepted values for field/text can be found here: 
+ * https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-EXTRACT
+ * Both functions are the same. The extract function complies with SQL standard, 
+ * while date_part is as Postgres specific function.
  */
+
 SELECT EXTRACT(DAY FROM TIMESTAMP '2021-01-01 10:30:00') AS extract_day;
 SELECT EXTRACT(WEEK FROM TIMESTAMP '2021-01-01 10:30:00') AS extract_week;
 SELECT EXTRACT(YEAR FROM TIMESTAMP '2021-01-01 10:30:00') AS extract_year;
@@ -82,10 +96,13 @@ SELECT DATE_PART('isoyear', TIMESTAMP '2021-01-01 10:30:00') AS extract_isoyear;
 
 /* Date/Time truncation
  * a) date_trunc(text, timestamp) -> timestamp: Truncate to specified precision
- * b) date_trunc(text, timestamp with time zone, text) -> timestamp with time zone: Truncate to specified precision in the specified time zone
+ * b) date_trunc(text, timestamp with time zone, text) -> timestamp with time zone: 
+ * Truncate to specified precision in the specified time zone
  * c) date_trunc(text, interval) -> interval: Truncate to specified precision
- * A full list of accepted values for text can be found here: https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-TRUNC
+ * A full list of accepted values for text can be found here: 
+ * https://www.postgresql.org/docs/current/functions-datetime.html#FUNCTIONS-DATETIME-TRUNC
  */
+
 SELECT DATE_TRUNC('millennium', TIMESTAMP '2021-06-27 10:30:00') AS trunc_millennium;
 SELECT DATE_TRUNC('decade', TIMESTAMP '2021-06-27 10:30:00') AS trunc_decade;
 SELECT DATE_TRUNC('quarter', TIMESTAMP '2021-06-27 10:30:00') AS trunc_quarter;
@@ -111,6 +128,7 @@ SELECT DATE_TRUNC('hour', TIMESTAMP '2021-06-27 10:30:00') AS trunc_hour;
  * 16. interval * double precision -> interval: Multiply an interval by a scalar
  * 17. interval / double precision -> interval: Divide an interval by a scalar
  */
+
 SELECT DATE '2021-01-01' + 7 AS add_days_to_date;
 SELECT DATE '2021-01-01' + INTERVAL '7 hour' AS add_interval_to_date;
 SELECT DATE '2021-01-01' + TIME '07:00' AS add_time_to_date;
@@ -130,68 +148,45 @@ SELECT INTERVAL '7 second' * 130 AS multiply_interval_by_scalar;
 SELECT INTERVAL '7 hour' / 60 AS divide_interval_by_scalar;
 
 /* Date/Time overlap
- * a) (start1, end1) OVERLAPS (start2, end2) -> bool: This expression yields true when two time periods (defined by their endpoints) overlap, false when they do not overlap.
- * b) (start1, length1) OVERLAPS (start2, length2) -> bool: This expression yields true when two time periods (defined by their endpoints) overlap, false when they do not overlap.
+ * a) (start1, end1) OVERLAPS (start2, end2) -> bool: This expression yields true 
+ * when two time periods (defined by their endpoints) overlap, false when they do not overlap.
+ * b) (start1, length1) OVERLAPS (start2, length2) -> bool: This expression yields true 
+ * when two time periods (defined by their endpoints) overlap, false when they do not overlap.
  */
+
 SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
        (DATE '2021-01-15', DATE '2021-02-15');
 SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
        (DATE '2021-02-01', DATE '2021-02-28');
 
-
 /* Exercises
  * Now it's time to put what you've learned into practice.
- * The following exercises need to be solved using the flights and airports table from the PostgreSQL database you've already worked with.
+ * The following exercises need to be solved using the flights and airports table from the PostgreSQL database 
+ * you've already worked with.
  * Challenge your understanding and try to come up with the correct solution.
+ *
  *
  * 1. What's the current timestamp?
  *    Please provide the query below.
  */
+    
 
 /* 2. Return the current timestamp and truncate it to the current day.
  *    Please provide the query below.
- */      
+ */   
+
 
 /* 3. Convert the current timestamp to UNIX format and back in a single query.
  *    Please provide the query below.
  */      
 
-/*  
- * 4.1 Query the following columns from the flights table: flight_date, origin, dest, dep_time, arr_time and air_time.
- *     Convert dep_time, arr_time into TIME variables: dep_time_f and arr_time_f 
- *     Convert air_time into an INTERVAL variable: air_time_f
- *     Calculate the difference of dep_time_f and arr_time_f in a new column called travel_time.
- *     Please provide the query below.
+
+/* 4. Retrieve the day from the current timestamp in a single query.
+ *    Please provide the query below.
  */
 
-/* 4.2 Compare the travel time with the air_time column.
- * 	How many values are matching? Provide the number in total and percentage.
- *     Please provide the query and answer below.
- */
 
-/* 4.3 Try to explain the results of 4.2.
- *     Please provide the answer below.
- */
-
-/* 4.4 Join the airports table and add the time zone columns to your existing table.
- * 	Before you add them, transform them to INTERVAL and change their names to origin_tz and dest_tz.
- *     Please provide the query below.
- */
-
-/* 4.5 Next, convert the departure and arrival time to UTC and store them in dep_time_f_utc and arr_time_f_utc.
- * 	Calculate the difference of the new columns and store it in a a new column travel_time_utc.
- *     Please provide the query below.
- */
-
-/* 4.6 What's the percentage of matching records now?
- *     Explain the result.
- *     Please provide the query and answer below.
- */
-
-/* 4.7 Add two columns to your table
- * 	dep_timestamp_utc: a timestamp that shows the date and time of the departure in UTC time zone
- *     arr_timestamp_utc: a timestamp that shows the date and time of the arrival in UTC time zone
- *     How many flights arrived after midnight UTC?
- *     Please provide the query and answer below.
+/* 5. Retrieve the current timestamp value 24 hours before.
+ *    Please provide the query below.
  */
 
