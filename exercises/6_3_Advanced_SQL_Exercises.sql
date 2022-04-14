@@ -1,7 +1,23 @@
 /* This file is full of practical exercises that will help you in building up your advanced SQL skills.
  */
 
-/* Q1. Which country had the most departures?
+
+ /* Q1.1 Which countries had any departures on the '2021-01-04'?
+ *     Please provide the query and answer below.
+ */ 
+
+
+/* Q1.2 Which plane had the most departures?
+ *     Please provide the query and answer below.
+ */
+
+
+/* Q1.3 What country had the most departures?
+ *     Please provide the query and answer below.
+ */
+
+
+/* Q1.4 What city had the second most arrivals?
  *     Please provide the query and answer below.
  */
 
@@ -75,12 +91,11 @@
 
 /* BONUS: Advanced Aggregations using Window Functions
  * Q8.1 The airline American Airlines (AA) wants you to take a look at one of their planes: N825AW
- * 		They want you to provide a table with 4 columns: flight_date, tail_number, arr_delay, acc_flight_delay.
- * 		The 'acc_flight_delay' should be the running sum of the arr_delay from beginning to end of the month.
- * 		The list should be sorted by the flight date starting with the earliest date.
- * 		Please provide the query below and answer the following questions:
- * 		1. How many minutes of delay has the plane accumulated on its last day?
- * 		2. On how many days did the plane arrive earlier than scheduled?
+ * 		They want you to provide a list with 4 columns: flight_date, tail_number, arr_delay, acc_flight_delay.
+ * 		The 'acc_flight_delay' should calculate the running sum of the arr_delay from beginning to the end of the month
+ * 		The list should be sorted by the flight date starting with the earliest date
+ * 		Please provide the query below and answer the following question:
+ * 		How much delay time has the plane accumulated on its last day?
  */
 
 

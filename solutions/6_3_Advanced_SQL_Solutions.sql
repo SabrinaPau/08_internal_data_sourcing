@@ -211,10 +211,10 @@ WHERE distance = (SELECT MIN(distance)
  * 		They want you to provide a list with 4 columns: flight_date, tail_number, arr_delay, acc_flight_delay.
  * 		The 'acc_flight_delay' should calculate the running sum of the arr_delay from beginning to the end of the month
  * 		The list should be sorted by the flight date starting with the earliest date
- * 		Please provide the query below and answer the following questions: 
- * 		1. How much delay time has the plane accumulated on its last day?
- * 		2. On how many days did the plane arrive earlier than scheduled (=flight delay > 0)?
+ * 		Please provide the query below and answer the following question:
+ * 		How much delay time has the plane accumulated on its last day?
  */
+
 SELECT flight_date,
 	   tail_number,
 	   arr_delay,
@@ -224,10 +224,6 @@ WHERE airline = 'AA'
   AND tail_number='N825AW'
 ORDER BY flight_date;
 
-SELECT count( DISTINCT flight_date)  
-FROM flights f 
-WHERE flight_date IN (SELECT flight_date FROM flights f2 WHERE dep_delay > 0)
-GROUP BY flight_date;
 
 /* Q8.2 After American Airlines looked at the output you gave them, they realised that the arrival delay
  *      is heavily influenced by the departure delay. If a plane already departed late then it has a high
