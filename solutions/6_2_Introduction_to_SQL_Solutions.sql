@@ -63,7 +63,7 @@ SELECT COUNT(*) AS total_airports
 FROM airports
 WHERE alt BETWEEN 500 AND 1500;
 
-1361;
+1.361;
 
 /* Q7. How many flights had a departure delay smaller or equal to 0?
  *     Please provide the query and answer below.
@@ -81,7 +81,7 @@ SELECT AVG(dep_delay) AS avg_dep_delay
 FROM flights
 WHERE flight_date = '2021-01-01';
 
-5.65;
+5.99;
 
 /* Q9.1 How many flights have a missing value (NULL value) as their departure time?
  *      Please provide the query and answer below.
@@ -90,7 +90,7 @@ SELECT COUNT(*) AS no_dep_time
 FROM flights
 WHERE dep_time IS NULL;
 
-6663;
+3.535;
 
 /* Q9.2 Out of all flights how many flights were cancelled? 
  *      Is this number equal to the number of flights that have a NULL value as their departure time above?
@@ -99,12 +99,12 @@ WHERE dep_time IS NULL;
 SELECT SUM(cancelled) AS cancelled_flights
 FROM flights;
 
-6927 - NOT equal;
+6.647 - NOT equal;
 
 /* Q9.3 What does the answer you arrived at in the question above (Q9.2) mean and how could it be explained?
- */
-The numbers are not equal even though they should be. Cancelled flights should not have a departure time.
-The difference could be explained by last minute cancellations.
+* The numbers are not equal even though they should be. Cancelled flights should not have a departure time. 
+* The difference could be explained by last minute cancellations after pushback.
+*/
 
 /* Q10. What's the total number of airports FROM BENELUX countries?
  *      Please provide the query and answer below.
@@ -133,7 +133,7 @@ FROM flights
 WHERE flight_date = '2021-01-01'
   AND (dep_time IS NULL OR cancelled = 1);
   
-121;
+329;
 
 /* Q13. What's the name of the airport that is shown in the first row when sorting by airport code descending?
  *      Please provide the query and answer below.
@@ -169,6 +169,11 @@ FROM airports;
 SELECT name
 FROM airports
 WHERE alt = -1266;
+
+SELECT name, alt 
+FROM airports
+ORDER BY alt
+LIMIT 1;
 
 Bar Yehuda Airfield;
 
@@ -224,11 +229,12 @@ SELECT airline,
 	   tail_number,
 	   COUNT(*) AS total_flights
 FROM flights
+WHERE tail_number IS NOT NULL
 GROUP BY airline,
 		 tail_number
 ORDER BY COUNT(*) DESC;
 
-HA - N488HA - 333;
+HA - N480HA - 218;
 
 /* Q20. How many planes have only done 1 flight in total in 2021?
  * 		Please provide the query and answer below.
