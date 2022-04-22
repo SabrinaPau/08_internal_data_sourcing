@@ -50,6 +50,20 @@ SELECT DISTINCT tz
 FROM airports
 ORDER BY tz;
 
+/* COUNT
+ * Find out how many rows total are in the table
+ */
+SELECT COUNT(*)
+FROM airports;
+
+/* COUNT DISTINCT ROWS
+ * Find out how many unique rows total are in the table
+ * To combine count and distinct, (brackets) are needed.
+ * Find out how many unique countries are in the table
+ */
+SELECT COUNT(DISTINCT country)
+FROM airports;
+
 /* LIMIT
  * Compared to 200 rows that DBeaver returns by default, LIMIT 15 only returns 15 rows.
  */
