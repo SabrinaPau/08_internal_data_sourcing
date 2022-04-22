@@ -136,7 +136,7 @@ SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
  *    Please provide the query and answer below.
  */
 
-/* 3. How many airports have the leteer 'X' as the second letter in their airport code?
+/* 3. How many airports have the letter 'X' as the second letter in their airport code?
  *    Please provide the query and answer below.
  */
 

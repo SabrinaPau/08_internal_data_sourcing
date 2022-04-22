@@ -206,6 +206,10 @@ WHERE SUBSTRING(name FROM 1 FOR 1) = SUBSTRING(city FROM 1 FOR 1);
 SELECT COUNT(*)
 FROM airports
 WHERE name LIKE '%' || city || '%';
+-- or 
+SELECT COUNT(*)
+FROM airports a 
+WHERE SUBSTRING(name FROM city) = city;
 
 3746;
 

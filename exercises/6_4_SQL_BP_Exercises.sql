@@ -32,8 +32,8 @@ select flight_date as flightDate,
 from flights f 
 where origin in (select faa
 				 from airports
-				 where alt > 1000
-				   and alt < 8000
+				 where alt >= 1000
+				   and alt <= 8000
 				   and (country = 'Germany'
 				    	or country = 'Netherlands'
 				    	or country = 'Belgium'
