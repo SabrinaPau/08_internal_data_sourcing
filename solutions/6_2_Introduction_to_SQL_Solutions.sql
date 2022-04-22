@@ -28,7 +28,7 @@ LIMIT 20;
 SELECT COUNT(*)
 FROM flights;
 
-607346;
+361.428;
 
 /* Q3.2 What is the total number of unique airlines in the flights table?
  * 		Please provide the query and answer below.
