@@ -72,7 +72,7 @@ SELECT COUNT(*) AS total_flights
 FROM flights
 WHERE dep_delay <= 0;
 
-433155;
+294.310;
 
 /* Q8. What was the average departure delay of all flights on January 1, 2021.
  *     Please provide the query and answer below.
