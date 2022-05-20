@@ -67,10 +67,10 @@ ORDER BY 1 DESC;
  */
 
 SELECT flight_date,
-	   origin,
-	   dest,
-	   dep_time,
-	   MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+	origin,
+	dest,
+	dep_time,
+	MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
        arr_time,
        MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        actual_elapsed_time,
@@ -107,22 +107,22 @@ FROM flights AS f) f;
  */
 
 SELECT flight_date,
-	   origin,
-	   dest,
-	   MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
-	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
-	   dep_time,
+	origin,
+	dest,
+	MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	dep_time,
        MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
-	   arr_time,
+	arr_time,
        MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        actual_elapsed_time,
        MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
        MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
 FROM flights f
 LEFT JOIN airports AS a
-	   ON f.origin=a.faa
+	ON f.origin=a.faa
 LEFT JOIN airports AS a2
-	   ON f.dest=a2.faa;
+	ON f.dest=a2.faa;
 
 	  
 /* 2.5 Next, convert the departure and arrival time to UTC and store them in dep_time_f_utc and arr_time_f_utc.
@@ -131,11 +131,11 @@ LEFT JOIN airports AS a2
  */
 	  
 SELECT flight_date,
-	   origin,
-	   dest,
-	   origin_tz,
-	   dest_tz,
-	   dep_time,
+	origin,
+	dest,
+	origin_tz,
+	dest_tz,
+	dep_time,
        arr_time,
        dep_time_f,
        arr_time_f,
@@ -147,11 +147,11 @@ SELECT flight_date,
        (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
 FROM (
 SELECT flight_date,
-	   origin,
-	   dest,
-	   MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
-	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
-	   dep_time,
+	origin,
+	dest,
+	MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	dep_time,
        arr_time,
        MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
        MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
@@ -180,8 +180,8 @@ SELECT
        (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
 FROM (
 SELECT 
-	   MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
-	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
        MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
        MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
@@ -197,51 +197,128 @@ LEFT JOIN airports AS a2
 	  
 
 /* Extra Credit: 2.7 Add two columns to your table
- * 				   	 dep_timestamp_utc: a timestamp that shows the date and time of the departure in UTC time zone
- *     			   	 arr_timestamp_utc: a timestamp that shows the date and time of the arrival in UTC time zone
- *     			   	 How many flights arrived after midnight UTC?
- *     			   	 Please provide the query and answer below.
+ * dep_timestamp_utc: a timestamp that shows the date and time of the departure in UTC time zone
+ * arr_timestamp_utc: a timestamp that shows the date and time of the arrival in UTC time zone
+ * How many flights arrived after midnight UTC?
+ * Please provide the query and answer below.
  */
 
 SELECT COUNT(*)
 FROM (
 SELECT flight_date,
-	   origin,
-	   dest,
-	   origin_tz,
-	   dest_tz,
-	   dep_time,
+	origin,
+	dest,
+	origin_tz,
+	dest_tz,
+	dep_time,
        arr_time,
        dep_time_f,
        arr_time_f,
        dep_time_f_utc,
        arr_time_f_utc,
        MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
-					  DATE_PART('month', flight_date)::INT,
-					  DATE_PART('day', flight_date)::INT,
-					  DATE_PART('hour', dep_time_f_utc)::INT,
-					  DATE_PART('minute', dep_time_f_utc)::INT,
-					  0) AS dep_timestamp_utc,
-	   MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
-					  DATE_PART('month', flight_date)::INT,
-					  CASE WHEN travel_time_f_utc < INTERVAL '0'
-					  	   THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
-					  	   ELSE DATE_PART('day', flight_date)::INT
-					  END,
-					  DATE_PART('hour', arr_time_f_utc)::INT,
-					  DATE_PART('minute', arr_time_f_utc)::INT,
-					  0) AS arr_timestamp_utc,
-	   actual_elapsed_time,
+			 DATE_PART('month', flight_date)::INT,
+			 DATE_PART('day', flight_date)::INT,
+			 DATE_PART('hour', dep_time_f_utc)::INT,
+			 DATE_PART('minute', dep_time_f_utc)::INT,
+			 0) AS dep_timestamp_utc,
+	MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+			 DATE_PART('month', flight_date)::INT,
+			 CASE WHEN travel_time_f_utc < INTERVAL '0'
+			      THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
+			      ELSE DATE_PART('day', flight_date)::INT
+		        END,
+			 DATE_PART('hour', arr_time_f_utc)::INT,
+			 DATE_PART('minute', arr_time_f_utc)::INT,
+			 0) AS arr_timestamp_utc,
+	actual_elapsed_time,
        actual_elapsed_time_f,
        travel_time_f,
        travel_time_f_utc
 FROM (
 SELECT flight_date,
-	   origin,
-	   dest,
-	   origin_tz,
-	   dest_tz,
-	   dep_time,
+	origin,
+	dest,
+	origin_tz,
+	dest_tz,
+	dep_time,
+       arr_time,
+       dep_time_f,
+       arr_time_f,
+       dep_time_f - origin_tz AS dep_time_f_utc,
+       arr_time_f - dest_tz AS arr_time_f_utc,
+       actual_elapsed_time,
+       actual_elapsed_time_f,
+       travel_time_f,
+       (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
+FROM (
+SELECT flight_date,
+	origin,
+	dest,
+	MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	dep_time,
+       arr_time,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+       actual_elapsed_time,
+       MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+FROM flights f
+LEFT JOIN airports AS a
+	ON f.origin=a.faa
+LEFT JOIN airports AS a2
+	ON f.dest=a2.faa) f) ff) fff
+WHERE DATE_PART('day', arr_timestamp_utc) > DATE_PART('day', dep_timestamp_utc);
+
+--> 52596;
+
+
+/* Extra Credit: 2.8 Until now, we achieved a match rate of nearly 84%
+ * 1. Do you have any ideas how to increase the match rate any further?
+ * 2. Create a query and confirm your ideas.  
+ * e.g. consider overnight flights when calculating the travel time
+ */          
+ 
+SELECT ROUND((SUM((actual_elapsed_time_f=(arr_timestamp_utc - dep_timestamp_utc))::INT) * 1.0/COUNT(*) * 100),2) AS match_percent
+FROM (
+SELECT flight_date,
+	origin,
+	dest,
+	origin_tz,
+	dest_tz,
+	dep_time,
+       arr_time,
+       dep_time_f,
+       arr_time_f,
+       dep_time_f_utc,
+       arr_time_f_utc,
+       MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+			 DATE_PART('month', flight_date)::INT,
+			 DATE_PART('day', flight_date)::INT,
+			 DATE_PART('hour', dep_time_f_utc)::INT,
+			 DATE_PART('minute', dep_time_f_utc)::INT,
+			 0) AS dep_timestamp_utc,
+	MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+			 DATE_PART('month', flight_date)::INT,
+			 CASE WHEN travel_time_f_utc < INTERVAL '0'
+			      THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
+			      ELSE DATE_PART('day', flight_date)::INT
+			 END,
+			 DATE_PART('hour', arr_time_f_utc)::INT,
+			 DATE_PART('minute', arr_time_f_utc)::INT,
+			 0) AS arr_timestamp_utc,
+	actual_elapsed_time,
+       actual_elapsed_time_f,
+       travel_time_f,
+       travel_time_f_utc
+FROM (
+SELECT flight_date,
+	origin,
+	dest,
+	origin_tz,
+	dest_tz,
+	dep_time,
        arr_time,
        dep_time_f,
        arr_time_f,
@@ -268,50 +345,7 @@ FROM flights f
 LEFT JOIN airports AS a
 	   ON f.origin=a.faa
 LEFT JOIN airports AS a2
-	   ON f.dest=a2.faa) f) ff) fff
-WHERE DATE_PART('day', arr_timestamp_utc) > DATE_PART('day', dep_timestamp_utc);
+	   ON f.dest=a2.faa) f) ff) fff;
 
---> 52596;
-
-
-/* Extra Credit: 2.8 Until now, we achieved a match rate of nearly 84%
- * 					 1. Do you have any ideas how to increase the match rate any further?
- *  				 2. Create a query and confirm your ideas.  
- *           e.g. consider overnight flights when calculating the travel time
- */          
- 
-SELECT ROUND((SUM((actual_elapsed_time_f=correct_travel_time)::INT) * 1.0/COUNT(*) * 100),2) AS match_percent 
-FROM(
-SELECT 
-    df.flight_date,
-    df.dep_time_f,
-    df.arr_time_f,
-    df.actual_elapsed_time_f,
-    df.travel_time_f,
-    MAKE_INTERVAL(hours => a1.tz ::INT) AS origin_tz,
-    MAKE_INTERVAL(hours => a2.tz ::INT) AS dest_tz,
-    df.dep_time_f - MAKE_INTERVAL(hours => a1.tz ::INT) AS dep_time_f_utc,
-    df.arr_time_f - MAKE_INTERVAL(hours => a2.tz ::INT) AS arr_time_f_utc,
-    CASE 
-        WHEN df.arr_time_f - MAKE_INTERVAL(hours => a2.tz ::INT) < df.dep_time_f - MAKE_INTERVAL(hours => a1.tz ::INT)
-        THEN (INTERVAL '24' HOUR) + ((df.arr_time_f - MAKE_INTERVAL(hours => a2.tz ::INT)) - (df.dep_time_f - MAKE_INTERVAL(hours => a1.tz ::INT)))
-        ELSE (df.arr_time_f - MAKE_INTERVAL(hours => a2.tz ::INT)) - (df.dep_time_f - MAKE_INTERVAL(hours => a1.tz ::INT))
-    END AS correct_travel_time
-FROM(
-    SELECT 
-        flight_date,
-        origin,
-        dest,
-        actual_elapsed_time,
-        make_interval(mins => actual_elapsed_time ::INT) AS actual_elapsed_time_f,
-        make_time((dep_time ::INT)/100, (dep_time ::INT)%100, 0) AS dep_time_f,
-        make_time((arr_time ::INT)/100, (arr_time ::INT)%100, 0) AS arr_time_f,
-        make_time((arr_time ::INT)/100, (arr_time ::INT)%100, 0) - make_time((dep_time ::INT)/100, (dep_time ::INT)%100, 0) AS travel_time_f 
-FROM flights f) AS df
-INNER JOIN airports a1 
-        ON df.origin = a1.faa
-INNER JOIN airports a2
-        ON df.dest = a2.faa) AS ff;
-
-====> 98.83%;
+====> 98.26%;
 
