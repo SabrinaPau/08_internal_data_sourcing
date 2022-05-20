@@ -102,7 +102,7 @@
 
 
 
-/* BONUS: Advanced Aggregations using Window Functions
+//* BONUS: Advanced Aggregations using Window Functions
  * Q8.1 The airline American Airlines (AA) wants you to take a look at one of their planes: N825AW
  * 		They want you to provide a list with 4 columns: flight_date, tail_number, arr_delay, acc_flight_delay.
  * 		The 'acc_flight_delay' should calculate the running sum of the arr_delay from beginning to the end of the month
@@ -132,16 +132,13 @@
 
 
 /* Q8.4 They love it! Good job! Since your work has been very helpful to them they want to expand the output to
- * 		more planes that they own. Please add the following planes in your output: N206UW, N756AM, N9018E.
+ * 		more planes that they own. Please add the following planes in your output: N825AW, N756AM, N9018E.
  * 		Hint: Make sure your window function can handle multiple planes ;)
  * 		Additionally they would like you to add an additional column to the output called net_flight_delay_cat.
- *		This column should one of five categories depending on the value of net_flight_delay.
- *		If net_flight_delay > 0 then '1-Godspeed'
- *		   net_flight_delay = 0 then '2-YOLO'
- *		   net_flight_delay > -10 then '3-Meh'
- *		   net_flight_delay > -25 then '4-Sh*t'
- *		   net_flight_delay > -50 then '5-Oh no'
- *		   else '6-WTF.
+ *		This column should one of three categories depending on the value of net_flight_delay.
+ *		If net_flight_delay > 0 then '1-Slower'
+ *		   net_flight_delay = 0 then '2-As_expected'
+ *		   else '3-Faster'.
  *		Please provide the query below.
  */
 
@@ -151,9 +148,6 @@
  * 		Please summarise the previous output so that the final output groups by the tail_number
  * 		and the dep_delay_cat and aggregates the number of flights in each category in a column
  * 		called total_flights and the average flight delay in the column avg_daily_flight_delay.
- * 		Which plane(s) managed to fly at godspeed?
- * 		Which plane(s) managed to yolo a precision landing?
- * 		How many flights ended up in the '6-WTF' category?
  */
 
 
