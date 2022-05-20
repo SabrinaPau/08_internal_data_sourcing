@@ -1,6 +1,4 @@
 /* This file is full of practical exercises that will help you in building up your advanced SQL skills.
- * Please note that the results of the queries in the solution file may differ from yours.
- * This can happen if the data used for the course has changed in the meantime.
  */
 
 /* Q1.1 Which countries had any departures on the '2021-01-04'?
@@ -12,8 +10,6 @@ FROM airports a
 INNER JOIN flights f 
 ON a.faa = f.origin 
 WHERE flight_date = '2021-01-04';
-
---> Guam, Virgin Islands, United States, Puerto Rico, Northern Mariana Islands
 
 
 /* Q1.2 Which plane had the most departures?
@@ -28,8 +24,6 @@ AND cancelled != 1
 GROUP BY tail_number
 ORDER BY COUNT(*) DESC 
 LIMIT 1;
-
---> N480HA
 
 
 /* Q1.3 Which country had the most departures?
@@ -46,8 +40,6 @@ GROUP BY country
 ORDER BY COUNT(*) DESC
 LIMIT 1;
 
---> United States
-
 
 /* Q1.4 To which city/cities does the airport with the second most arrivals belong?
  *      Please provide the query and answer below.
@@ -63,8 +55,6 @@ ORDER BY COUNT(*) DESC
 OFFSET 1
 LIMIT 1;
 
---> Dallas-Fort Worth
-
 
 /* Q2. How many rows are in your result set when you inner join the flights and airports table on faa and origin column?
  * 	   How many rows are in your result set when you left join the flights and airports table on faa and origin column?
@@ -76,24 +66,24 @@ LIMIT 1;
 SELECT COUNT(*)
 FROM flights f
 INNER JOIN airports a
-	    ON f.origin=a.faa; -- 361311
+	    ON f.origin=a.faa;
 
 SELECT COUNT(*)
 FROM flights f
 LEFT JOIN airports a
-	   ON f.origin=a.faa; -- 361428
+	   ON f.origin=a.faa;
 
 SELECT COUNT(*)
 FROM flights f
 RIGHT JOIN airports a
-	    ON f.origin=a.faa; -- 367028
+	    ON f.origin=a.faa;
 
 SELECT COUNT(*)
 FROM flights f
 FULL JOIN airports a
-	   ON f.origin=a.faa; -- 367145
+	   ON f.origin=a.faa;
 
---> differences in airport codes, e.g. two airport codes (origin) from flights not in airports (faa)
+--> differences in the number of airport codes between flights (origin) and airports (faa)
 
 
 /* Q3.1 Filter the data to January 1, 2021 and count all rows for that day so that your result set has two columns: flight_date, total_flights.  
@@ -179,8 +169,6 @@ GROUP BY flight_date
 ORDER BY COUNT(*) DESC
 LIMIT 1;
 
---> 28
-
 
 /* Q5.1 How many flights have departed and arrived in the United States?
  *      You are NOT allowed to use INNER, LEFT, RIGHT, FULL or CROSS joins!
@@ -195,8 +183,6 @@ WHERE origin IN (SELECT faa
   AND dest IN (SELECT faa
 			   FROM airports
 			   WHERE country='United States');
-
---> 356125
 
 
 /* Q5.2 [Hard] Take your query from above and calculate the percentage of flights that have departed 
@@ -214,7 +200,6 @@ WHERE origin IN (SELECT faa
 				FROM airports
 				WHERE country='United States');
 
---> 98.5 %
 --> The multiplication with 1.00 is one way to convert an integer to a numeric data type.
 
 
@@ -235,12 +220,6 @@ INNER JOIN airports a
 ON a.faa = f.origin
 WHERE f.dep_delay = (SELECT MAX(f.dep_delay)
 				   FROM flights f);
-
---> flight_date: 2021-01-18
---> flight_number: 693
---> dep_delay: 2554
---> tail_number: N415AN
---> city: Honolulu
 
 
 /* Q7. What's the flight connection that covers the shortest distance?
@@ -266,8 +245,6 @@ LEFT JOIN airports a2
 	   ON f.dest = a2.faa
 WHERE distance = (SELECT MIN(distance)
 				  FROM flights);
-
---> between Petersburg James A Johnson Airport (US) and Wrangell Airport (US) - flight distance: 31 miles
 
 
 /* BONUS: Advanced Aggregations using Window Functions
@@ -316,103 +293,78 @@ ORDER BY flight_date;
  */
 
 SELECT dl.flight_date,
-	   dl.tail_number,
-	   SUM(dl.net_flight_delay) AS net_flight_delay
+	  dl.tail_number,
+	  SUM(dl.net_flight_delay) AS net_flight_delay,
+	  dl.acc_net_flight_delay
 FROM(
 SELECT flight_date,
-	   tail_number,
-	   dep_delay,
-	   arr_delay,
-	   arr_delay-dep_delay AS net_flight_delay,
-	   SUM(arr_delay-dep_delay) OVER (ORDER BY flight_date ASC, arr_delay) AS acc_net_flight_delay
+	  tail_number,
+	  dep_delay,
+	  arr_delay,
+	  arr_delay-dep_delay AS net_flight_delay,
+	  SUM(arr_delay-dep_delay) OVER (ORDER BY flight_date, tail_number) AS acc_net_flight_delay
 FROM flights
 WHERE airline = 'AA'
 ORDER BY flight_date ASC) AS dl
-GROUP BY 1,2;
+GROUP BY 1,2,4
+ORDER BY 1,2;
 
 
 /* Q8.4 They love it! Good job! Since your work has been very helpful to them they want to expand the output to
- * 		more planes that they own. Please add the following planes in your output: N206UW, N756AM, N9018E.
+ * 		more planes that they own. Please add the following planes in your output: N825AW, N756AM, N9018E.
  * 		Hint: Make sure your window function can handle multiple planes ;)
  * 		Additionally they would like you to add an additional column to the output called net_flight_delay_cat.
- *		This column should one of five categories depending on the value of net_flight_delay.
- *		If net_flight_delay > 0 then '1-Godspeed'
- *		   net_flight_delay = 0 then '2-YOLO'
- *		   net_flight_delay > -10 then '3-Meh'
- *		   net_flight_delay > -25 then '4-Sh*t'
- *		   net_flight_delay > -50 then '5-Oh no'
- *		   else '6-WTF.
+ *		This column should one of three categories depending on the value of net_flight_delay.
+ *		If net_flight_delay > 0 then '1-Slower'
+ *		   net_flight_delay = 0 then '2-As_expected'
+ *		   else '3-Faster'.
  *		Please provide the query below.
  */
 
-SELECT dl.flight_date,
-	   dl.tail_number,
+SELECT flight_date,
+	   tail_number,
 	   SUM(dl.net_flight_delay) AS net_flight_delay,
-	   CASE WHEN SUM(dl.net_flight_delay) > 0 THEN '1-Godspeed'
-	   		WHEN SUM(dl.net_flight_delay) = 0 THEN '2-YOLO'
-	   		WHEN SUM(dl.net_flight_delay) > -10 THEN '3-Meh'
-	   		WHEN SUM(dl.net_flight_delay) > -25 THEN '4-Sh*t'
-	   		WHEN SUM(dl.net_flight_delay) > -50 THEN '5-Oh no'
-	   		ELSE '6-WTF'
+	   CASE WHEN SUM(dl.net_flight_delay) > 0 THEN '1-Slower'
+	   		WHEN SUM(dl.net_flight_delay) = 0 THEN '2-As_expected'
+	   		ELSE '3-Faster'
 	   END AS net_flight_delay_cat
 FROM(
 SELECT flight_date,
 	   tail_number,
-	   dep_delay,
-	   arr_delay,
-	   arr_delay-dep_delay AS net_flight_delay,
-	   SUM(arr_delay-dep_delay) OVER (PARTITION BY tail_number ORDER BY flight_date, arr_delay) AS acc_net_flight_delay
+	   arr_delay-dep_delay AS net_flight_delay
 FROM flights
 WHERE airline = 'AA'
-  AND tail_number IN ('N825AW', 'N206UW', 'N756AM', 'N9018E')
+  AND tail_number IN ('N825AW', 'N756AM', 'N9018E')
 ORDER BY tail_number, flight_date) AS dl
 GROUP BY 1,2
-ORDER BY 2,1;
+ORDER BY 1,2;
 
 
 /* Q8.5 You've been doing an amazing job, American Airlines has one last request for you:
  * 		Please summarise the previous output so that the final output groups by the tail_number
  * 		and the dep_delay_cat and aggregates the number of flights in each category in a column
  * 		called total_flights and the average flight delay in the column avg_daily_flight_delay.
- * 		Which plane(s) managed to fly at godspeed?
- * 		Which plane(s) managed to yolo a precision landing?
- * 		How many flights ended up in the '6-WTF' category?
  */
 
-SELECT sm.tail_number,
-	   sm.net_flight_delay_cat,
+SELECT flight_date,
+	   tail_number,
 	   COUNT(*) AS total_flights,
-	   AVG(sm.net_flight_delay) AS avg_daily_flight_delay
-FROM(
-SELECT dl.flight_date,
-	   dl.tail_number,
 	   SUM(dl.net_flight_delay) AS net_flight_delay,
-	   CASE WHEN SUM(dl.net_flight_delay) > 0 THEN '1-Godspeed'
-	   		WHEN SUM(dl.net_flight_delay) = 0 THEN '2-YOLO'
-	   		WHEN SUM(dl.net_flight_delay) > -10 THEN '3-Meh'
-	   		WHEN SUM(dl.net_flight_delay) > -25 THEN '4-Sh*t'
-	   		WHEN SUM(dl.net_flight_delay) > -50 THEN '5-Oh no'
-	   		ELSE '6-WTF'
+	   AVG(dl.net_flight_delay) AS net_flight_delay,
+	   CASE WHEN SUM(dl.net_flight_delay) > 0 THEN '1-Slower'
+	   		WHEN SUM(dl.net_flight_delay) = 0 THEN '2-As_expected'
+	   		ELSE '3-Faster'
 	   END AS net_flight_delay_cat
 FROM(
 SELECT flight_date,
 	   tail_number,
-	   dep_delay,
-	   arr_delay,
-	   arr_delay-dep_delay AS net_flight_delay,
-	   SUM(arr_delay-dep_delay) OVER (PARTITION BY tail_number ORDER BY flight_date, arr_delay) AS acc_net_flight_delay
+	   arr_delay-dep_delay AS net_flight_delay
 FROM flights
 WHERE airline = 'AA'
-  AND tail_number IN ('N825AW', 'N206UW', 'N756AM', 'N9018E')
+  AND tail_number IN ('N825AW', 'N756AM', 'N9018E')
 ORDER BY tail_number, flight_date) AS dl
 GROUP BY 1,2
-ORDER BY 2,1) AS sm
-GROUP BY 1,2
-ORDER BY 1,2 DESC;
-
-N756AM, N9018E;
-N9018E;
-3;
+ORDER BY 1,2;
 
 
 /* Q9. Final question: 
