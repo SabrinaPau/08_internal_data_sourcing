@@ -291,3 +291,33 @@ WHERE DATE_PART('day', arr_timestamp_utc) > DATE_PART('day', dep_timestamp_utc);
  * 					 1. Do you have any ideas how to increase the match rate any further?
  *  				 2. Create a query and confirm your ideas.  
  */
+SELECT ROUND((SUM((actual_elapsed_time_f=correct_travel_time)::INT) * 1.0/COUNT(*) * 100),2) AS match_percent 
+FROM(
+SELECT df.flight_date,
+    df.dep_time_f,
+    df.arr_time_f,
+    df.actual_elapsed_time_f,
+    df.travel_time_f,
+    MAKE_INTERVAL(hours => a1.tz ::INT) AS origin_tz,
+    MAKE_INTERVAL(hours => a2.tz ::INT) AS dest_tz,
+    df.dep_time_f - MAKE_INTERVAL(hours => a1.tz ::INT) AS dep_time_f_utc,
+    df.arr_time_f - MAKE_INTERVAL(hours => a2.tz ::INT) AS arr_time_f_utc,
+    CASE WHEN df.arr_time_f - MAKE_INTERVAL(hours => a2.tz ::INT) < df.dep_time_f - MAKE_INTERVAL(hours => a1.tz ::INT)
+      THEN (INTERVAL '24' HOUR) + ((df.arr_time_f - MAKE_INTERVAL(hours => a2.tz ::INT)) - (df.dep_time_f - MAKE_INTERVAL(hours => a1.tz ::INT)))
+      ELSE (df.arr_time_f - MAKE_INTERVAL(hours => a2.tz ::INT)) - (df.dep_time_f - MAKE_INTERVAL(hours => a1.tz ::INT))
+    END AS correct_travel_time
+FROM (SELECT flight_date,
+    origin,
+    dest,
+    actual_elapsed_time,
+    make_interval(mins => actual_elapsed_time ::INT) AS actual_elapsed_time_f,
+    make_time((dep_time ::INT)/100, (dep_time ::INT)%100, 0) AS dep_time_f,
+    make_time((arr_time ::INT)/100, (arr_time ::INT)%100, 0) AS arr_time_f,
+    make_time((arr_time ::INT)/100, (arr_time ::INT)%100, 0) - make_time((dep_time ::INT)/100, (dep_time ::INT)%100, 0) AS travel_time_f 
+FROM flights f) AS df
+INNER JOIN airports a1 
+ON df.origin = a1.faa
+INNER JOIN airports a2
+ON df.dest = a2.faa) AS ff;
+
+====> 98.83%;
