@@ -3,12 +3,11 @@
 */
 
 /*  
- * 1 As a Data Analyst, it is crucial to be able to make sure that you can rely on the quality of your data.
+ *   As a Data Analyst, it is crucial to be able to make sure that you can rely on the quality of your data.
  *   In the actual_elapsed_time column you have data with the calculated time from departure to arrival. 
  *   But are you really sure that you can rely on its quality in order to do business recommendations?  
  *   Since we have the data on departure and arrival time, we can do our own calculations and compare the results.
  */
-
 /*  
  * 1.1 But first, let's take a closer look at the data and get an overall view.
  * 	   Since computational power comes at some costs and is shared by many people inside a company,
@@ -27,7 +26,6 @@
  */
 
 
-
 /*  
  * 1.3 What do the values in these three columns mean?
  *     Please provide the answer below.    
@@ -36,11 +34,10 @@
 
 
 /*  
- * 2   Finally. Let's start with the actual task. In the next steps, you are going to calculate the travel time 
- *     and match it with the actual_elapsed_time column values.
+ *     Now that we understand our data. Let's start with the actual task. In the next steps, you are going to calculate the flight time 
+ *     based on dep_time and arr_time and match it with the actual_elapsed_time column values.
  * 	   ==> The main objective is to get as close as possible to a match rate of 100%.
  */
-
  /*
  * 2.1 Query the following columns from the flights table: flight_date, origin, dest, dep_time, arr_time and actual_elapsed_time.
  *     Convert dep_time, arr_time into TIME variables: dep_time_f and arr_time_f 
