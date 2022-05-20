@@ -312,7 +312,6 @@ ORDER BY 1,2;
 
 /* Q8.4 They love it! Good job! Since your work has been very helpful to them they want to expand the output to
  * 		more planes that they own. Please add the following planes in your output: N825AW, N756AM, N9018E.
- * 		Hint: Make sure your window function can handle multiple planes ;)
  * 		Additionally they would like you to add an additional column to the output called net_flight_delay_cat.
  *		This column should one of three categories depending on the value of net_flight_delay.
  *		If net_flight_delay > 0 then '1-Slower'
