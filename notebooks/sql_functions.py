@@ -14,8 +14,10 @@ def get_sql_config():
     sql_config = {key:dotenv_dict[key] for key in needed_keys if key in dotenv_dict}
     return sql_config
 
-# Import sqlqlchemy and pandas - do this only when instructed
+# Import sqlalchemy and pandas - do this only when instructed
 
 # Insert the get_data() function definition below - do this only when instructed in the notebook
 
 # Insert the get_dataframe() function definition below - do this only when instructed in the notebook
+
+# Insert the get_engine() function definition below - when instructed
