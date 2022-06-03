@@ -1,18 +1,24 @@
 # Connecting to PostgreSQL in Python
-In this repository you're going to learn how to connect to PostgreSQL and retrieve its data using Python.
+In this repository you're going to learn how to connect to PostgreSQL and retrieve data using dBeaver and Python.
 
 ## Why internal data sourcing?
-The two main tools of Data Analysts are SQL and Python. Internal data is often stored in a database. Thus, knowing how to combine SQL and Python in order to access, retrieve and manipulate the data is essential!
+The two main tools of Data Analysts are SQL and Python. Internal data is often stored in a database. Thus, knowing how to access data in an SQL database is the top skill for a data analyst. Being able to combine SQL and Python in order to access, retrieve and manipulate the data makes you a data rockstar!
 ## Tasks
-Create a new conda environment using the environment.yml file.  
+Follow the lectures to work through the code-alongs and exercises using dbeaver.
+
+As a final step we will return to working in jupyter notebooks. At this point follow the below instructions:  
+
+Create a new conda environment by cloning your nf_base environment or create a new one from the environment.yml file.  
 Use your terminal to navigate to your folder and run the following command:  
-```conda env create -f environment.yml```  
+```conda create --clone nf_base --name nf_sql```  
 
 Activate your new environment by typing:  
-```conda activate sql-practice```
+```conda activate nf_sql```
 
-Add another module to your environment:
-```conda install -n sql-practice python-dotenv```
+Add the new modules to your environment:
+```conda install -n nf_sql python-dotenv```
+```conda install -n nf_sql sqlalchemy```
+```conda install -n nf_sql pyscopg2 -c conda-forge```
 
 Please work in pairs through all the notebooks in this particular order: 
 
