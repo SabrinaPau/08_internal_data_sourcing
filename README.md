@@ -8,17 +8,16 @@ Follow the lectures to work through the code-alongs and exercises using dbeaver.
 
 As a final step we will return to working in jupyter notebooks. At this point follow the below instructions:  
 
-Create a new conda environment by cloning your nf_base environment or create a new one from the environment.yml file.  
-Use your terminal to navigate to your folder and run the following command:  
+Create a new conda environment by cloning your nf_base environment.   
 ```conda create --clone nf_base --name nf_sql```  
 
 Activate your new environment by typing:  
 ```conda activate nf_sql```
 
-Add the new modules to your environment:
-```conda install -n nf_sql python-dotenv```
-```conda install -n nf_sql sqlalchemy```
-```conda install -n nf_sql pyscopg2 -c conda-forge```
+Add the new modules to your environment:  
+```conda install -n nf_sql -c conda-forge python-dotenv```  
+```conda install -n nf_sql sqlalchemy```  
+```conda install -n nf_sql -c conda-forge psycopg2```
 
 Please work in pairs through all the notebooks in this particular order: 
 
