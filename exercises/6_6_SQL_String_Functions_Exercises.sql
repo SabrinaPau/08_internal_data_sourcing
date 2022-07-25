@@ -136,9 +136,20 @@ SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
  *    Please provide the query and answer below.
  */
 
-/* 3. How many airports have the letter 'X' as the second letter in their airport code?
- *    Please provide the query and answer below.
+/* 3. How many airports have 'X' as the second letter in their airport code (column: faa)?
+ *    Run the 3 queries below and explain why the results are different and which result is correct.
  */
+SELECT COUNT(*)
+FROM airports
+WHERE STRPOS(faa, 'X') = 2;
+
+SELECT COUNT(*)
+FROM airports
+WHERE faa LIKE '_X_';
+
+SELECT COUNT(*)
+FROM airports
+WHERE faa LIKE '%X%';
 
 /* 4. Combine the 'faa' and 'name' column in the airports table so that your output looks as follows: 'faa - name'.
  *    Please provide the query below.
