@@ -152,24 +152,31 @@ SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
  * 1. What's the current timestamp with time zone?
  *    Please provide the query below.
  */
-    
 
-/* 2. Return the current timestamp and truncate it to the current day.
- *    Please provide the query below.
+/* 2.1 Return the current timestamp and truncate it to the current day.
+ *     Please provide the query below.
  */   
 
+/* 2.2 Return a sorted list of all unique flight dates available in the flights table.
+ *     Please provide the query below.
+ */   
 
-/* 3. Convert the current timestamp to UNIX format and back in a single query.
+/* 2.3 Return a sorted list of all unique flight dates available in the flights table and add 30 days and 12 hours to each date.
+ *     Please provide the query below.
+ */   
+
+/* 3.1 Return the hour of the current timestamp.
+ *     Please provide the query below.
+ */
+
+/* 3.2 Sum up all unique days of the flight dates available in the flights table.
+ *     Please provide the query below.
+ */
+
+/* 3.3 Split all unique flight dates into three separate columns: year, month, day. 
+ *     Use these columns in an outer query and recreate an ordered list of all flight_dates.
+ */
+
+/* 4. Convert the current timestamp to UNIX format and back in a single query.
  *    Please provide the query below.
  */      
-
-
-/* 4. Retrieve the day from the current timestamp in a single query.
- *    Please provide the query below.
- */
-
-
-/* 5. Retrieve the current timestamp value 24 hours before.
- *    Please provide the query below.
- */
-
