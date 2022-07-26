@@ -149,33 +149,56 @@ SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
  * Challenge your understanding and try to come up with the correct solution.
  *
  *
- * 1. What's the current timestamp?
+ * 1. What's the current timestamp with time zone?
  *    Please provide the query below.
  */
-    
+SELECT NOW();    
 SELECT CURRENT_TIMESTAMP;
 
-/* 2. Return the current timestamp and truncate it to the current day.
- *    Please provide the query below.
+/* 2.1 Return the current timestamp and truncate it to the current day.
+ *     Please provide the query below.
  */   
+SELECT DATE_TRUNC('day', CURRENT_TIMESTAMP) AS current_date;
 
-SELECT DATE_TRUNC('day', CURRENT_TIMESTAMP);
+/* 2.2 Return a sorted list of all unique flight dates available in the flights table.
+ *     Please provide the query below.
+ */   
+SELECT DISTINCT DATE_TRUNC('day', flight_date) AS current_date 
+FROM flights
+ORDER BY 1;
 
-/* 3. Convert the current timestamp to UNIX format and back in a single query.
+/* 2.3 Return a sorted list of all unique flight dates available in the flights table and add 30 days and 12 hours to each date.
+ *     Please provide the query below.
+ */   
+SELECT DISTINCT flight_date + 30 + INTERVAL '12 hours' AS same_timestamp_yesterday
+FROM flights
+ORDER BY 1;
+
+/* 3.1 Return the hour of the current timestamp.
+ *     Please provide the query below.
+ */
+SELECT DATE_PART('day', CURRENT_TIMESTAMP) AS current_day;
+
+/* 3.2 Sum up all unique days of the flight dates available in the flights table.
+ *     Please provide the query below.
+ */
+SELECT SUM(DISTINCT DATE_PART('day', flight_date)) AS current_day
+FROM flights;
+-- 496
+
+/* 3.3 Split all unique flight dates into three separate columns: year, month, day. 
+ *     Use these columns in an outer query and recreate an ordered list of all flight_dates.
+ */
+SELECT MAKE_DATE(year, month, day) AS flight_date
+FROM (
+		    SELECT DISTINCT DATE_PART('day', flight_date)::INT AS day,
+						                DATE_PART('month', flight_date)::INT AS month,
+						                DATE_PART('year', flight_date)::INT AS year
+		    FROM flights) f
+ORDER BY 1;
+
+/* 4. Convert the current timestamp to UNIX format and back in a single query.
  *    Please provide the query below.
  */      
-
 SELECT EXTRACT(EPOCH FROM CURRENT_TIMESTAMP); -- this step is just for your understanding
 SELECT TO_TIMESTAMP(EXTRACT(EPOCH FROM CURRENT_TIMESTAMP));
-
-/* 4. Retrieve the day from the current timestamp in a single query.
- *    Please provide the query below.
- */
-
-SELECT DATE_PART('day', (SELECT CURRENT_TIMESTAMP)) AS extract_day;
-
-/* 5. Retrieve the current timestamp value 24 hours before.
- *    Please provide the query below.
- */
-
-SELECT (SELECT CURRENT_TIMESTAMP) - INTERVAL '24 hours'  AS day_before;
