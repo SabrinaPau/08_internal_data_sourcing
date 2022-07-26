@@ -149,7 +149,7 @@ SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
  * Challenge your understanding and try to come up with the correct solution.
  *
  *
- * 1. What's the current timestamp time zone?
+ * 1. What's the current timestamp with time zone?
  *    Please provide the query below.
  */
     
