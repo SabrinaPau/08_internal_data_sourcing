@@ -12,11 +12,11 @@
 /* Q2. Improve the query below so its intent is conveyed clearly.
  */
 SELECT faa AS airport_code, 
-	   lat AS latitude,
-	   lon AS longitude,
-	   alt AS altitude,
-	   tz AS timezone,
-	   dst AS daylight_savings_time
+       lat AS latitude,
+       lon AS longitude,
+       alt AS altitude,
+       tz AS timezone,
+       dst AS daylight_savings_time
 FROM airports a
 JOIN flights f
   ON a.faa = f.origin;
@@ -26,26 +26,26 @@ JOIN flights f
 [ ] Use snake_case for column names and camelCase for table names
 [x] Use IN instead of many OR statements
 [ ] Only capitalize aggregate functions and keep the rest lowercase
-[x] Use BETWEEN whenever possible
 [ ] None of the above
 
 /* Q4. Improve the readability of the SQL query below.
  */
 SELECT flight_date,
-	   dep_time AS departure_time,
-	   arr_time AS arrival_time,
-	   COUNT(*) AS total_flights
+       dep_time AS departure_time,
+       arr_time AS arrival_time,
+       COUNT(*) AS total_flights
 FROM flights
 WHERE origin IN (SELECT faa
-				 FROM airports
-				 WHERE alt BETWEEN 1000 AND 8000
-				   AND country IN ('Germany', 
-				   					'Netherlands', 
-				   					'Belgium',
-				   					'United States'))
+		 FROM airports
+		 WHERE alt >= 1000 
+		   AND alt <= 8000
+		   AND country IN ('Germany', 
+				   'Netherlands', 
+				   'Belgium',
+				   'United States'))
 GROUP BY flightdate,
-		 dep_time,
-		 arr_time
+         dep_time,
+	 arr_time
 ORDER BY COUNT(*);
 
 /* Q5. Which common mistakes should be avoided when writing SQL code?
