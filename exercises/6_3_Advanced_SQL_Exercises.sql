@@ -82,22 +82,22 @@
 
  /* Q6. Which flight had the highest departure delay?
  *      How big was the delay?
- * 	    What was the plane's tail number?
- * 	    On which day and in which city?   
- * 	    Answer all questions with a single query.
+ *      What was the plane's tail number?
+ *      On which day and in which city?   
+ *      Answer all questions with a single query.
  */
 
 
 
 /* Q7. What's the flight connection that covers the shortest distance?
- * 	   Please provide a list with 5 columns: 
+ *     Please provide a list with 5 columns: 
  *     - origin_airport = The full name of the origin airport
- * 	   - origin_country = The country of the origin airport
- * 	   - destination_airport = The full name of the destination airport
- * 	   - destination_country = The country of the destination airport
- * 	   - smallest_distance = The flight distance between origin_airport and destination_airport
- * 	   Remember: Only provide the flight connection with the shortest distance of all flights in the flights table.
- * 	   Please provide the query below.
+ *     - origin_country = The country of the origin airport
+ *     - destination_airport = The full name of the destination airport
+ *     - destination_country = The country of the destination airport
+ *     - smallest_distance = The flight distance between origin_airport and destination_airport
+ *     Remember: Only provide the flight connection with the shortest distance of all flights in the flights table.
+ *     Please provide the query below.
  */
 
 
@@ -152,6 +152,6 @@
 
 
 /* Q9. Final question: 
- * 	   Three SQL databases walk into a bar... then they leave. Why?
- * 	   They couldn't find a table. *badum ts*
+ *     Three SQL databases walk into a bar... then they leave. Why?
+ *     They couldn't find a table. *badum ts*
  */
