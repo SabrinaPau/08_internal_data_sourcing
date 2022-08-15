@@ -27,10 +27,10 @@
 
 
 /* Q2. How many rows are in your result set when you inner join the flights and airports table on faa and origin column?
- * 	   How many rows are in your result set when you left join the flights and airports table on faa and origin column?
- * 	   How many rows are in your result set when you right the flights and airports table on faa and origin column?
+ *     How many rows are in your result set when you left join the flights and airports table on faa and origin column?
+ *     How many rows are in your result set when you right the flights and airports table on faa and origin column?
  *     How many rows are in your result set when you full join the flights and airports table on faa and origin column?
- * 	   Please explain why the number of rows are different.
+ *     Please explain why the number of rows are different.
  */
 
 
@@ -61,7 +61,7 @@
 
 /* Q4. What's the highest number of flights that have departed in a day from an airport above altitude 7800?
  *     You are NOT allowed to use INNER, LEFT, RIGHT, FULL or CROSS joins!
- * 	   Please provide the query and answer below.
+ *     Please provide the query and answer below.
  */
 
 
