@@ -227,6 +227,10 @@ FROM flights;
 SELECT LEFT(CAST(flight_date AS VARCHAR), 4)
 FROM flights;
 
+-- or using the ::TYPE notation
+SELECT LEFT(flight_date::VARCHAR)
+FROM flights;
+
 /* OPTIONAL: Advanced Aggregations with Window Functions
  * Window functions perform calculations across a set of table rows
  * that are somehow related to the current row.
