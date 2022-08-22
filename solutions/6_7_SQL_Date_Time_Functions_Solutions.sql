@@ -170,7 +170,7 @@ ORDER BY 1;
 /* 2.3 Return a sorted list of all unique flight dates available in the flights table and add 30 days and 12 hours to each date.
  *     Please provide the query below.
  */   
-SELECT DISTINCT flight_date + 30 + INTERVAL '12 hours' AS same_timestamp_yesterday
+SELECT DISTINCT flight_date + INTERVAL '30 day' + INTERVAL '12 hour' AS same_timestamp_yesterday
 FROM flights
 ORDER BY 1;
 
