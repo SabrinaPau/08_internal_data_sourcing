@@ -155,13 +155,22 @@ WHERE STARTS_WITH(name, 'X');
 17;
 
 /* 3. How many airports have 'X' as the second letter in their airport code (column: faa)?
- *    Please provide the query and answer below.
+ *    Run the 3 queries below and explain why the results are different and which result is correct.
  */
 SELECT COUNT(*)
 FROM airports
 WHERE STRPOS(faa, 'X') = 2;
+-- The above query is wrong because STRPOS returns the index of the FIRST instance of the substring: STRPOS(faa, 'X') for 'XXA' will return 1.
 
-142;
+SELECT COUNT(*)
+FROM airports
+WHERE faa LIKE '_X_';
+-- The above query is correct, because the '_' in '_X_' specifies that there MUST be a character before and after the 'X'
+
+SELECT COUNT(*)
+FROM airports
+WHERE faa LIKE '%X%';
+-- The above query is wrong, because the '%' in '%X%' specifies that there CAN be a character before and/or after the 'X' 
 
 
 /* 4. Combine the 'faa' and 'name' column in the airports table so that your output looks as follows: 'faa - name'.

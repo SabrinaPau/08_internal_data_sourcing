@@ -20,7 +20,6 @@ JOIN flights x2 ON x1.faa = x2.origin;
 [ ] Use snake_case for column names and camelCase for table names
 [ ] Use IN instead of many OR statements
 [ ] Only capitalize aggregate functions and keep the rest lowercase
-[ ] Use BETWEEN whenever possible
 [ ] None of the above
 
 /* Q4. Improve the readability of the SQL query below.

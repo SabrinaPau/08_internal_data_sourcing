@@ -6,39 +6,22 @@
  * More info about Date/Time functions: https://www.postgresql.org/docs/current/functions-datetime.html
  */
 
-/* Current Date/Time
- * PostgreSQL provides a number of functions that all return values based on the start time of the current transaction.
- * This means, that during the transaction, their values do not change.
- * 1. CURRENT_DATE -> date: Current date
- * 2. CURRENT_TIME -> time with time zone: Current time of day
- * 3. CURRENT_TIMESTAMP -> timestamp with time zone: Current date and time (start of current transaction)
- * 4. LOCALTIME -> time without time zone: Current time of day
- * 5. LOCALTIMESTAMP -> timestamp without time zone: Current date and time (start of current transaction);
- */
-
-SELECT CURRENT_DATE AS curr_date_without_zone;
-SELECT CURRENT_TIME AS curr_time_with_zone;
-SELECT CURRENT_TIMESTAMP AS curr_timestamp_with_zone;
-
-SELECT LOCALTIME AS local_time_no_zone;
-SELECT LOCALTIMESTAMP AS local_time_no_zone;
+/* Current dates & times
+ * PostgreSQL provides a number of functions that return current timestamps, dates or times.
+ * 1. Use CURRENT_TIMESTAMP or NOW() if you want a timestamp with time zone
+ * 2. Use LOCALTIMESTAMP if you want a timestamp without time zone
+ * 3. Use CURRENT_DATE if you want a date
+ * 4. Use LOCALTIME if you want a time without time zone
  
-/* PostgreSQL also provides functions that return the start time of the current statement, 
- * as well as the actual current time at the instant the function is called.
- * 6. TRANSACTION_TIMESTAMP() -> timestamp with time zone: Current date and time 
- * (start of current transaction) - equivalent to CURRENT_TIMESTAMP
- * 7. STATEMENT_TIMESTAMP() -> timestamp with time zone: Current date and time (start of current statement);
- * 8. CLOCK_TIMESTAMP() -> timestamp with time zone: Current date and time (changes during statement execution);
- * 9. TIMEOFDAY() -> text: Current date and time (like clock_timestamp, but as a text string)
- * 10. NOW() -> timestamp with time zone: Current date and time (start of current transaction) 
- * - equivalent to transaction_timestamp()
+ Important:
+ * Don't use CURRENT_TIME but any of the other functions above (https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_use_CURRENT_TIME)
+ * Don't use the timestamp type to store timestamps, use timestamptz (also known as timestamp with time zone) instead (https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_use_timestamp_.28without_time_zone.29
  */
 
-SELECT TRANSACTION_TIMESTAMP() AS transaction_timestamp_with_zone;
-SELECT STATEMENT_TIMESTAMP() AS statement_timestamp_with_zone;
-SELECT CLOCK_TIMESTAMP() AS clock;
-SELECT TIMEOFDAY() AS current_date_time_string;
-SELECT NOW() AS current_date_time_with_zone;
+SELECT NOW() AS timestamp_with_time_zone;
+SELECT CURRENT_TIMESTAMP AS curr_timestamp_with_time_zone;
+SELECT CURRENT_DATE AS curr_date_without_time_zone;
+SELECT LOCALTIME AS local_time_without_time_zone;
 
 /* Date/Time creation
  * 1. make_date(year int, month int, day int) -> date: Create date from year, month and day fields
@@ -47,7 +30,7 @@ SELECT NOW() AS current_date_time_with_zone;
  * from years, months, weeks, days, hours, minutes and seconds fields
  * 3. make_time(hour int, min int, sec double precision) -> time: Create time from hour, minute and seconds fields
  * 4. make_timestamp(year int, month int, day int, hour int, min int, sec double precision) -> 
- * timestamp: Create timestamp from year, month, day, hour, minute and seconds fields
+ * timestamp: Create timestamp from year, month, day, hour, minute and seconds fields !Dont use this function: https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_use_timestamp_.28without_time_zone.29
  * 5. make_timestamptz(year int, month int, day int, hour int, min int, sec double precision, 
  * [ timezone text ]) -> timestamp with time zone: Create timestamp with time zone from year, month, day, hour, 
  * minute and seconds fields; if timezone is not specified, the current time zone is used
@@ -166,27 +149,34 @@ SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
  * Challenge your understanding and try to come up with the correct solution.
  *
  *
- * 1. What's the current timestamp?
+ * 1. What's the current timestamp with time zone?
  *    Please provide the query below.
  */
-    
 
-/* 2. Return the current timestamp and truncate it to the current day.
- *    Please provide the query below.
+/* 2.1 Return the current timestamp and truncate it to the current day.
+ *     Please provide the query below.
  */   
 
+/* 2.2 Return a sorted list of all unique flight dates available in the flights table.
+ *     Please provide the query below.
+ */   
 
-/* 3. Convert the current timestamp to UNIX format and back in a single query.
+/* 2.3 Return a sorted list of all unique flight dates available in the flights table and add 30 days and 12 hours to each date.
+ *     Please provide the query below.
+ */   
+
+/* 3.1 Return the hour of the current timestamp.
+ *     Please provide the query below.
+ */
+
+/* 3.2 Sum up all unique days of the flight dates available in the flights table.
+ *     Please provide the query below.
+ */
+
+/* 3.3 Split all unique flight dates into three separate columns: year, month, day. 
+ *     Use these columns in an outer query and recreate an ordered list of all flight_dates.
+ */
+
+/* 4. Convert the current timestamp to UNIX format and back in a single query.
  *    Please provide the query below.
  */      
-
-
-/* 4. Retrieve the day from the current timestamp in a single query.
- *    Please provide the query below.
- */
-
-
-/* 5. Retrieve the current timestamp value 24 hours before.
- *    Please provide the query below.
- */
-
