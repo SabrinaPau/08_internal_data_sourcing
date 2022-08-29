@@ -99,7 +99,7 @@ WHERE dep_time IS NULL;
 SELECT SUM(cancelled) AS cancelled_flights
 FROM flights;
 
-6.647 - NOT equal;
+3.647 - NOT equal;
 
 /* Q9.3 What does the answer you arrived at in the question above (Q9.2) mean and how could it be explained?
 * The numbers are not equal even though they should be. Cancelled flights should not have a departure time. 
@@ -245,4 +245,4 @@ FROM flights
 GROUP BY tail_number 
 HAVING COUNT(*) = 1;
 
-21;
+23;
