@@ -223,12 +223,12 @@ WHERE dep_time IS NULL;
 SELECT LEFT(flight_date, 4)
 FROM flights;
 
--- CASTing the flight_date column to type VARCHAR resolves this
+-- We can either CAST the flight_date column to type VARCHAR to resolve this
 SELECT LEFT(CAST(flight_date AS VARCHAR), 4)
 FROM flights;
 
--- or using the ::TYPE notation
-SELECT LEFT(flight_date::VARCHAR)
+-- or use the ::TYPE notation
+SELECT LEFT(flight_date::VARCHAR, 4)
 FROM flights;
 
 /* OPTIONAL: Advanced Aggregations with Window Functions
