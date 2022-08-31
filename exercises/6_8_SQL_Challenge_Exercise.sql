@@ -1,30 +1,27 @@
 /* 
-* Try to get as far as you can in this challenge, but don't worry if you can't achieve all objectives.
-*/
-
-/*  
- *   As a Data Analyst, it is crucial to be able to make sure that you can rely on the quality of your data.
- *   In the actual_elapsed_time column you have data with the calculated time from departure to arrival. 
- *   But are you really sure that you can rely on its quality in order to do business recommendations?  
- *   Since we have the data on departure and arrival time, we can do our own calculations and compare the results.
+ *   Try to get as far as you can in this challenge, but don't worry if you can't achieve all objectives.
+ */
+ 
+/*   As a Data Analyst, it is crucial that you can rely on the quality of your data at all times.
+ *   The data in the actual_elapsed_time column in the flights table seems to be about the time from departure to arrival. 
+ *   At the moment you can't verify that this is true. So, do you feel confident in using this column in your analysis and give business recommendations?  
+ *   Your answer should be no. Fortunately, we have data about departure and arrival time, which allows us to do to our own calculation of the flight duration.
+ *   We can then compare our flight duration with the values in the actual_elapsed_time column and see whether the values are matching.
  */
 /*  
- * 1.1 But first, let's take a closer look at the data and get an overall view.
- * 	   Since computational power comes at some costs and is shared by many people inside a company,
- *     retrieve only as much data as you really need. So, let's take a look at the first 100 rows of the flights table.
+ * 1.1 First, let's get a first glimpse of our dataset.
+ * 	   Since computational power comes at a cost and is often shared by many people inside a company,
+ *     retrieve only as much data as you really need. Retrieve the first 100 rows of the flights table.
  * 	   Please provide the query below.
  */
 
-
-
 /*  
- * 1.2 And now, let's take a closer look at some particular relevant columns and make sure we fully understand these values.
+ * 1.2 Next, let's take a closer look at some specific columns and make sure we fully understand their meaning.
  * 	   What do the values in arr_time, dep_time and actual_elapsed_time really mean?
- * 	   Retrieve all unique values from these columns(in three separate queries) and order them in descending order.
+ * 	   Retrieve all unique values from these columns in three separate queries and order them in descending order.
  *     Remember, retrieve as much data as you need - not more and not less.
  * 	   Please provide the queries below.
  */
-
 
 /*  
  * 1.3 What do the values in these three columns mean?
@@ -33,11 +30,11 @@
 
 
 
-/*  
- *     Now that we understand our data. Let's start with the actual task. In the next steps, you are going to calculate the flight time 
- *     based on dep_time and arr_time and match it with the actual_elapsed_time column values.
- * 	   ==> The main objective is to get as close as possible to a match rate of 100%.
+/*     Now that we understand our data, let's start with the actual task. 
+ *     First, calculate the flight duration based on dep_time and arr_time.
+ *     Then, compare your flight duration values with with the actual_elapsed_time column values and calculate the percentage of matching values.
  */
+ 
  /*
  * 2.1 Query the following columns from the flights table: flight_date, origin, dest, dep_time, arr_time and actual_elapsed_time.
  *     Convert dep_time, arr_time into TIME variables: dep_time_f and arr_time_f 
