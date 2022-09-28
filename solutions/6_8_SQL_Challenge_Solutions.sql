@@ -1,98 +1,118 @@
-/* 
-* Try to get as far as you can in this challenge, but don't worry if you can't achieve all objectives.
-*/
-
-/*  
- * 1 As a Data Analyst, it is crucial to be able to make sure that you can rely on the quality of your data.
- *   In the actual_elapsed_time column you have data with the calculated time from departure to arrival. 
- *   But are you really sure that you can rely on its quality in order to do business recommendations?  
- *   Since we have the data on departure and arrival time, we can do our own calculations and compare the results.
+/*   As a Data Analyst, it is crucial that you can rely on the quality of your data at all times.
+ *   The data in the actual_elapsed_time column in the flights table seems to be about the time from departure to arrival.
+ *   Currently, this is only an assumption. Based on this assumption, do you feel confident in using this column in your 
+ *   analysis and giving out business recommendations?
+ *   If your answer is no, you're on a good path to becoming an analyst.
+ *
+ * 1. Using the data in the remaining columns in the flights table, can you think of a way to verify our assumption?
+ *    Please provide the answer below.
  */
 
-/*  
- * 1.1 But first, let's take a closer look at the data and get an overall view.
- * 	   Since computational power comes at some costs and is shared by many people inside a company,
- *     retrieve only as much data as you really need. So, let's take a look at the first 100 rows of the flights table.
- * 	   Please provide the query below.
+-- Yes, we can calculate the difference between departure and arrival time and compare it to the values in the 
+-- actual_elapsed_time column to check if they're equal.
+
+/*   Don't worry if you couldn't figure this one out. To verify our assumption, we can calculate the difference between 
+ *   departure and arrival time and compare the result to the values in the actual_elapsed_time column to check if they're equal.
  */
 
-SELECT * 
-FROM flights f 
-LIMIT 100;
+/* 2.1 The first step is to become familiar with the dep_time, arr_time and actual_elapsed_time columns.
+ *     Based on the column names and what you already know from previous exercises about the information that is stored 
+ *     in these three columns, what are your assumptions about the data type of the values?
+ */
+
+-- arr_time: TIME value in the format XX:XX e.g. 11:30
+-- dep_time: TIME value in the format XX:XX e.g. 11:30
+-- actual_elapsed_time: Either in seconds, minutes or hours; stored as INT or INTERVAL in the format XX:XX:XX e.g. 00:10:00
 
 
-/*  
- * 1.2 And now, let's take a closer look at some particular relevant columns and make sure we fully understand these values.
- * 	   What do the values in arr_time, dep_time and actual_elapsed_time really mean?
- * 	   Retrieve all unique values from these columns(in three separate queries) and order them in descending order.
- *     Remember, retrieve as much data as you need - not more and not less.
+/* 2.2 Retrieve all unique values from these columns in three separate queries and order them in descending order.
+ *     Did your assumptions turn out to be correct?
  * 	   Please provide the queries below.
  */
 
 SELECT DISTINCT arr_time
 FROM flights f
 ORDER BY 1 DESC;
+-- arr_time is stored as a hundred or thousand number
 
 SELECT DISTINCT dep_time
 FROM flights f
 ORDER BY 1 DESC;
+-- dep_time is stored as a hundred or thousand number
 
 SELECT DISTINCT actual_elapsed_time 
 FROM flights f
 ORDER BY 1 DESC;
+-- actual_elapsed_time is stored in minutes as INT/FLOAT
 
-
-/*  
- * 1.3 What do the values in these three columns mean?
- *     Please provide the answer below.    
+/* 3.1 Next, calculate the difference of dep_time and arr_time and call it flight_duration.
+ * 	   Please provide the query below.
  */
 
--- arr_time: interval value e.g. 1.234 ==> 12:34:00
--- dep_time: interval value e.g. 1.234 ==> 12:34:00
--- actual_elapsed_time: amount of minutes e.g. 125 ==> 2 hours and 5 minutes
+SELECT arr_time - dep_time AS flight_duration
+FROM flights;
 
-
-/*  
- * 2   Finally. Let's start with the actual task. In the next steps, you are going to calculate the travel time 
- *     and match it with the actual_elapsed_time column values.
- * 	   ==> The main objective is to get as close as possible to a match rate of 100%.
+/* 3.2 Are the calculated flight duration values correct? If not, what's the problem and how can we solve it?
+ *     Please provide the answer below.
  */
 
- /*
- * 2.1 Query the following columns from the flights table: flight_date, origin, dest, dep_time, arr_time and actual_elapsed_time.
- *     Convert dep_time, arr_time into TIME variables: dep_time_f and arr_time_f 
- *     Convert actual_elapsed_time into an INTERVAL variable: actual_elapsed_time_f
- *     Calculate the difference of dep_time_f and arr_time_f in a new column called travel_time_f.
- *     Please provide the query below.
+-- No, the values are not correct. dep_time and arr_time are not in time formats and the difference is not in minutes.
+
+/* 4 In order to calculate correct flight duration values we need to convert dep_time, arr_time and actual_elapsed_time 
+ *   into useful data types first.
+ *   Change dep_time and arr_time into TIME variables, call them dep_time_f and arr_time_f. (Hint: 100% focus on the remainder)
+ *   Change actual_elapsed_time into an INTERVAL variable, call it actual_elapsed_time_f.
+ *   Query flight_date, origin, dest, dep_time, dep_time_f, arr_time, arr_time_f, actual_elapsed_time and actual_elapsed_time_f.
+ *   Please provide the query below.
  */
 
 SELECT flight_date,
-	origin,
-	dest,
-	dep_time,
-	MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+       origin,
+       dest,
+       dep_time,
+       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
        arr_time,
        MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        actual_elapsed_time,
        MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
-FROM flights AS f;
+FROM flights;
 
-
-/* 2.2 Compare the travel_time_f column with the actual_elapsed_time_f column.
- * 	   How many values are matching? Provide the number in percentage.
- *     Please provide the query and answer below.
+/* 5.1 Again, calculate the difference, this time using dep_time_f and arr_time_f, as flight duration and call it travel_time_f.
+ * 	   Please provide the query below.
  */
 
-SELECT ROUND((SUM((actual_elapsed_time_f=travel_time_f)::INT) * 1.0/COUNT(*) * 100),2) AS match_percent
+SELECT arr_time_f - dep_time_f AS travel_time_f
 FROM (
-SELECT MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
-FROM flights AS f) f;
---> 49.44%;
+      SELECT flight_date,
+             origin,
+             dest,
+             dep_time,
+             MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+             arr_time,
+             MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+             actual_elapsed_time,
+             MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f
+      FROM flights) AS f;
 
+/* 5.2 Compare the calculated flight duration values in travel_time_f with the values in the actual_elapsed_time_f column and 
+ * 	   calculate the percentage of values that are equal in both columns.
+ * 	   Please provide the query below.
+ */
 
-/* 2.3 Try to explain the results of 2.2.
+SELECT SUM((actual_elapsed_time_f=(arr_time_f - dep_time_f))::INT) * 1.0/COUNT(*) * 100 AS match_percent
+FROM (
+      SELECT flight_date,
+             origin,
+             dest,
+             dep_time,
+             MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+             arr_time,
+             MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+             actual_elapsed_time,
+             MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f
+      FROM flights) AS f;
+
+/* 5.3 Given the percentage of matching values, can you come up with possible explanations for why the rate is so low?
  *     Please provide the answer below.
  */
 
@@ -100,42 +120,42 @@ FROM flights AS f) f;
 -- Overnight flights
 -- Bad data quality
 
-
-/* 2.4 Join the airports table and add the time zone columns to your existing table.
- * 	   Before you add them, transform them to INTERVAL and change their names to origin_tz and dest_tz.
+/* 6.1 Differences due to time zones might be one reason for the low rate of matching values.
+ *     To make sure the dep_time and arr_time values are all in the same time zone we need to know in which time zone they are.
+ *     Take your query from exercise 5.1 and add the time zone values from the airports table.
+ * 	   Make sure to transform them to INTERVAL and change their names to origin_tz and dest_tz.
  *     Please provide the query below.
  */
 
 SELECT flight_date,
-	origin,
-	dest,
-	MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
-	MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
-	dep_time,
+       origin,
+       dest,
+       MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+       MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+       dep_time,
        MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
-	arr_time,
+       arr_time,
        MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
        actual_elapsed_time,
        MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
        MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
 FROM flights f
 LEFT JOIN airports AS a
-	ON f.origin=a.faa
+	   ON f.origin=a.faa
 LEFT JOIN airports AS a2
-	ON f.dest=a2.faa;
+	   ON f.dest=a2.faa;
 
-	  
-/* 2.5 Next, convert the departure and arrival time to UTC and store them in dep_time_f_utc and arr_time_f_utc.
- * 	   Calculate the difference of the new columns and store it in a new column travel_time_f_utc.
+/* 6.2 Use the time zone columns to convert dep_time_f and arr_time_f to UTC and call them dep_time_f_utc and arr_time_f_utc.
+ * 	   Calculate the difference of both columns and call it travel_time_f_utc.
  *     Please provide the query below.
  */
-	  
+
 SELECT flight_date,
-	origin,
-	dest,
-	origin_tz,
-	dest_tz,
-	dep_time,
+       origin,
+       dest,
+       origin_tz,
+       dest_tz,
+       dep_time,
        arr_time,
        dep_time_f,
        arr_time_f,
@@ -146,206 +166,346 @@ SELECT flight_date,
        travel_time_f,
        (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
 FROM (
-SELECT flight_date,
-	origin,
-	dest,
-	MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
-	MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
-	dep_time,
-       arr_time,
-       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
-       actual_elapsed_time,
-       MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
-FROM flights f
-LEFT JOIN airports AS a
-	   ON f.origin=a.faa
-LEFT JOIN airports AS a2
-	   ON f.dest=a2.faa) f;
+      SELECT flight_date,
+             origin,
+             dest,
+             MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+             MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+             dep_time,
+             arr_time,
+             MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+             MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+             actual_elapsed_time,
+             MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+             MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+      FROM flights f
+      LEFT JOIN airports AS a
+	         ON f.origin=a.faa
+	  LEFT JOIN airports AS a2
+	         ON f.dest=a2.faa) AS f;
 
-
-/* 2.6 What's the percentage of matching records now?
- *     Explain the result.
+/* 6.3 Again, calculate the percentage of matching records using the new travel_time_f_utc column?
+ *     Explain the increase in matching records.
  *     Please provide the query and answer below.
  */
-	    
-SELECT ROUND((SUM((actual_elapsed_time_f=travel_time_f_utc)::INT) * 1.0/COUNT(*) * 100),2) AS match_percent 
+-- long solution
+SELECT ROUND((SUM((actual_elapsed_time_f=travel_time_f_utc)::INT) * 1.0/COUNT(*) * 100),2) AS match_percent  
 FROM (
-SELECT 
-       dep_time_f - origin_tz AS dep_time_f_utc,
-       arr_time_f - dest_tz AS arr_time_f_utc,
-       actual_elapsed_time_f,
-       travel_time_f,
-       (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
-FROM (
-SELECT 
-	MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
-	MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
-       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
-       MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
-FROM flights f
-LEFT JOIN airports AS a
-	   ON f.origin=a.faa
-LEFT JOIN airports AS a2
-	   ON f.dest=a2.faa) f) ff;
-	  
---> 83.76%;
--- we got the new matches due to the harmonization of time values with different timezones
-	  
+	  SELECT flight_date,
+	         origin,
+	         dest,
+	         origin_tz,
+	         dest_tz,
+	         dep_time,
+	         arr_time,
+	         dep_time_f,
+	         arr_time_f,
+	         dep_time_f - origin_tz AS dep_time_f_utc,
+	         arr_time_f - dest_tz AS arr_time_f_utc,
+	         actual_elapsed_time,
+	         actual_elapsed_time_f,
+	         travel_time_f,
+	         (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
+	  FROM (
+	        SELECT flight_date,
+	               origin,
+	               dest,
+	               MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	               MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	               dep_time,
+	               arr_time,
+	               MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+	               MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+	               actual_elapsed_time,
+	               MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+	               MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+	        FROM flights f
+	        LEFT JOIN airports AS a
+	               ON f.origin=a.faa
+	        LEFT JOIN airports AS a2
+	               ON f.dest=a2.faa) AS f
+	 ) AS ff;
 
-/* Extra Credit: 2.7 Add two columns to your table
- * dep_timestamp_utc: a timestamp that shows the date and time of the departure in UTC time zone
- * arr_timestamp_utc: a timestamp that shows the date and time of the arrival in UTC time zone
- * How many flights arrived after midnight UTC?
- * Please provide the query and answer below.
+-- short solution
+SELECT ROUND((SUM((actual_elapsed_time_f=travel_time_f_utc)::INT) * 1.0/COUNT(*) * 100),2) AS match_percent  
+FROM (
+	  SELECT dep_time_f - origin_tz AS dep_time_f_utc,
+	         arr_time_f - dest_tz AS arr_time_f_utc,
+	         actual_elapsed_time_f,
+	         (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
+	  FROM (
+	        SELECT MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	               MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	               MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+	               MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+	               MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+	               MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+	        FROM flights f
+	        LEFT JOIN airports AS a
+	               ON f.origin=a.faa
+	        LEFT JOIN airports AS a2
+	               ON f.dest=a2.faa
+	       ) AS f
+	 ) AS ff;
+
+/* Bonus Challenge
+ *
+ * 7.1 We managed to increase the rate of matching records, but it's still not at 100%.
+ *     Could overnight flights be an issue?
+ *     What's special about values in the travel_time_f_utc column for overnight flights?
+ *     Please provide the answer below.
  */
 
+-- The travel_time_f_utc is negative for overnight flights
+SELECT dep_time_f - origin_tz AS dep_time_f_utc,
+	   arr_time_f - dest_tz AS arr_time_f_utc,
+	   actual_elapsed_time_f,
+	   (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
+FROM (
+	  SELECT MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	         MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	         MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+	         MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+	         MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+	         MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+	  FROM flights f
+	  LEFT JOIN airports AS a
+	         ON f.origin=a.faa
+	  LEFT JOIN airports AS a2
+	         ON f.dest=a2.faa
+	 ) AS f
+ORDER BY travel_time_f_utc;
+
+/* 7.2 Calculate the total number of flights that arrived after midnight UTC.
+ *     Hint: I think it's time to go and buy some stamps.
+ *     Please provide the query below.
+ */
+-- long solution
 SELECT COUNT(*)
 FROM (
-SELECT flight_date,
-	origin,
-	dest,
-	origin_tz,
-	dest_tz,
-	dep_time,
-       arr_time,
-       dep_time_f,
-       arr_time_f,
-       dep_time_f_utc,
-       arr_time_f_utc,
-       MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
-			 DATE_PART('month', flight_date)::INT,
-			 DATE_PART('day', flight_date)::INT,
-			 DATE_PART('hour', dep_time_f_utc)::INT,
-			 DATE_PART('minute', dep_time_f_utc)::INT,
-			 0) AS dep_timestamp_utc,
-	MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
-			 DATE_PART('month', flight_date)::INT,
-			 CASE WHEN travel_time_f_utc < INTERVAL '0'
-			      THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
-			      ELSE DATE_PART('day', flight_date)::INT
-		        END,
-			 DATE_PART('hour', arr_time_f_utc)::INT,
-			 DATE_PART('minute', arr_time_f_utc)::INT,
-			 0) AS arr_timestamp_utc,
-	actual_elapsed_time,
-       actual_elapsed_time_f,
-       travel_time_f,
-       travel_time_f_utc
-FROM (
-SELECT flight_date,
-	origin,
-	dest,
-	origin_tz,
-	dest_tz,
-	dep_time,
-       arr_time,
-       dep_time_f,
-       arr_time_f,
-       dep_time_f - origin_tz AS dep_time_f_utc,
-       arr_time_f - dest_tz AS arr_time_f_utc,
-       actual_elapsed_time,
-       actual_elapsed_time_f,
-       travel_time_f,
-       (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
-FROM (
-SELECT flight_date,
-	origin,
-	dest,
-	MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
-	MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
-	dep_time,
-       arr_time,
-       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
-       actual_elapsed_time,
-       MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
-FROM flights f
-LEFT JOIN airports AS a
-	ON f.origin=a.faa
-LEFT JOIN airports AS a2
-	ON f.dest=a2.faa) f) ff) fff
+	  SELECT flight_date,
+	         origin,
+	         dest,
+	         origin_tz,
+	         dest_tz,
+	         dep_time,
+	         arr_time,
+	         dep_time_f,
+	         arr_time_f,
+	         dep_time_f_utc,
+	         arr_time_f_utc,
+	         MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+	                        DATE_PART('month', flight_date)::INT,
+	                        DATE_PART('day', flight_date)::INT,
+	                        DATE_PART('hour', dep_time_f_utc)::INT,
+	                        DATE_PART('minute', dep_time_f_utc)::INT,
+	                        0) AS dep_timestamp_utc,
+	         MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+	                        DATE_PART('month', flight_date)::INT,
+	                        CASE WHEN travel_time_f_utc < INTERVAL '0'
+	                             THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
+	                             ELSE DATE_PART('day', flight_date)::INT
+                            END,
+                            DATE_PART('hour', arr_time_f_utc)::INT,
+                            DATE_PART('minute', arr_time_f_utc)::INT,
+                            0) AS arr_timestamp_utc,
+             actual_elapsed_time,
+             actual_elapsed_time_f,
+             travel_time_f,
+             travel_time_f_utc
+      FROM (
+            SELECT flight_date,
+                   origin,
+                   dest,
+                   origin_tz,
+                   dest_tz,
+                   dep_time,
+                   arr_time,
+                   dep_time_f,
+                   arr_time_f,
+                   dep_time_f - origin_tz AS dep_time_f_utc,
+                   arr_time_f - dest_tz AS arr_time_f_utc,
+                   actual_elapsed_time,
+                   actual_elapsed_time_f,
+                   travel_time_f,
+                   (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
+	        FROM (
+	              SELECT flight_date,
+	                     origin,
+	                     dest,
+	                     MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	                     MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	                     dep_time,
+	                     arr_time,
+	                     MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+	                     MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+	                     actual_elapsed_time,
+	                     MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+	                     MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+	              FROM flights f
+	              LEFT JOIN airports AS a
+	                     ON f.origin=a.faa
+	              LEFT JOIN airports AS a2
+	                     ON f.dest=a2.faa
+	             ) AS f
+	       ) AS ff
+     ) AS fff
 WHERE DATE_PART('day', arr_timestamp_utc) > DATE_PART('day', dep_timestamp_utc);
 
---> 52596;
+-- short solution
+SELECT COUNT(*)
+FROM (
+	  SELECT MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+	                        DATE_PART('month', flight_date)::INT,
+	                        DATE_PART('day', flight_date)::INT,
+	                        DATE_PART('hour', dep_time_f_utc)::INT,
+	                        DATE_PART('minute', dep_time_f_utc)::INT,
+	                        0) AS dep_timestamp_utc,
+	         MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+	                        DATE_PART('month', flight_date)::INT,
+	                        CASE WHEN travel_time_f_utc < INTERVAL '0'
+	                             THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
+	                             ELSE DATE_PART('day', flight_date)::INT
+                            END,
+                            DATE_PART('hour', arr_time_f_utc)::INT,
+                            DATE_PART('minute', arr_time_f_utc)::INT,
+                            0) AS arr_timestamp_utc
+      FROM (
+            SELECT flight_date,
+                   dep_time_f - origin_tz AS dep_time_f_utc,
+                   arr_time_f - dest_tz AS arr_time_f_utc,
+                   actual_elapsed_time_f,
+                   (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
+	        FROM (
+	              SELECT flight_date,	                     
+	                     MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	                     MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	                     MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+	                     MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+	                     MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+	                     MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+	              FROM flights f
+	              LEFT JOIN airports AS a
+	                     ON f.origin=a.faa
+	              LEFT JOIN airports AS a2
+	                     ON f.dest=a2.faa
+	             ) AS f
+	       ) AS ff
+     ) AS fff
+WHERE DATE_PART('day', arr_timestamp_utc) > DATE_PART('day', dep_timestamp_utc);
 
-
-/* Extra Credit: 2.8 Until now, we achieved a match rate of nearly 84%
- * 1. Do you have any ideas how to increase the match rate any further?
- * 2. Create a query and confirm your ideas.  
- * e.g. consider overnight flights when calculating the travel time
- */          
- 
+/* 7.3 Use your knowledge from 7.1 and 7.2 to increase the rate of matching records even further.
+ *     Please provide the query below.
+ */
+-- long solution
 SELECT ROUND((SUM((actual_elapsed_time_f=(arr_timestamp_utc - dep_timestamp_utc))::INT) * 1.0/COUNT(*) * 100),2) AS match_percent
 FROM (
-SELECT flight_date,
-	origin,
-	dest,
-	origin_tz,
-	dest_tz,
-	dep_time,
-       arr_time,
-       dep_time_f,
-       arr_time_f,
-       dep_time_f_utc,
-       arr_time_f_utc,
-       MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
-			 DATE_PART('month', flight_date)::INT,
-			 DATE_PART('day', flight_date)::INT,
-			 DATE_PART('hour', dep_time_f_utc)::INT,
-			 DATE_PART('minute', dep_time_f_utc)::INT,
-			 0) AS dep_timestamp_utc,
-	MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
-			 DATE_PART('month', flight_date)::INT,
-			 CASE WHEN travel_time_f_utc < INTERVAL '0'
-			      THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
-			      ELSE DATE_PART('day', flight_date)::INT
-			 END,
-			 DATE_PART('hour', arr_time_f_utc)::INT,
-			 DATE_PART('minute', arr_time_f_utc)::INT,
-			 0) AS arr_timestamp_utc,
-	actual_elapsed_time,
-       actual_elapsed_time_f,
-       travel_time_f,
-       travel_time_f_utc
-FROM (
-SELECT flight_date,
-	origin,
-	dest,
-	origin_tz,
-	dest_tz,
-	dep_time,
-       arr_time,
-       dep_time_f,
-       arr_time_f,
-       dep_time_f - origin_tz AS dep_time_f_utc,
-       arr_time_f - dest_tz AS arr_time_f_utc,
-       actual_elapsed_time,
-       actual_elapsed_time_f,
-       travel_time_f,
-       (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
-FROM (
-SELECT flight_date,
-	   origin,
-	   dest,
-	   MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
-	   MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
-	   dep_time,
-       arr_time,
-       MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
-       actual_elapsed_time,
-       MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
-       MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
-FROM flights f
-LEFT JOIN airports AS a
-	   ON f.origin=a.faa
-LEFT JOIN airports AS a2
-	   ON f.dest=a2.faa) f) ff) fff;
+	  SELECT flight_date,
+	         origin,
+	         dest,
+	         origin_tz,
+	         dest_tz,
+	         dep_time,
+	         arr_time,
+	         dep_time_f,
+	         arr_time_f,
+	         dep_time_f_utc,
+	         arr_time_f_utc,
+	         MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+	                        DATE_PART('month', flight_date)::INT,
+	                        DATE_PART('day', flight_date)::INT,
+	                        DATE_PART('hour', dep_time_f_utc)::INT,
+	                        DATE_PART('minute', dep_time_f_utc)::INT,
+	                        0) AS dep_timestamp_utc,
+	         MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+	                        DATE_PART('month', flight_date)::INT,
+	                        CASE WHEN travel_time_f_utc < INTERVAL '0'
+	                             THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
+	                             ELSE DATE_PART('day', flight_date)::INT
+                            END,
+                            DATE_PART('hour', arr_time_f_utc)::INT,
+                            DATE_PART('minute', arr_time_f_utc)::INT,
+                            0) AS arr_timestamp_utc,
+             actual_elapsed_time,
+             actual_elapsed_time_f,
+             travel_time_f,
+             travel_time_f_utc
+      FROM (
+            SELECT flight_date,
+                   origin,
+                   dest,
+                   origin_tz,
+                   dest_tz,
+                   dep_time,
+                   arr_time,
+                   dep_time_f,
+                   arr_time_f,
+                   dep_time_f - origin_tz AS dep_time_f_utc,
+                   arr_time_f - dest_tz AS arr_time_f_utc,
+                   actual_elapsed_time,
+                   actual_elapsed_time_f,
+                   travel_time_f,
+                   (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
+	        FROM (
+	              SELECT flight_date,
+	                     origin,
+	                     dest,
+	                     MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	                     MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	                     dep_time,
+	                     arr_time,
+	                     MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+	                     MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+	                     actual_elapsed_time,
+	                     MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+	                     MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+	              FROM flights f
+	              LEFT JOIN airports AS a
+	                     ON f.origin=a.faa
+	              LEFT JOIN airports AS a2
+	                     ON f.dest=a2.faa
+	             ) AS f
+	       ) AS ff
+     ) AS fff;
 
-====> 98.26%;
-
+-- short solution
+SELECT ROUND((SUM((actual_elapsed_time_f=(arr_timestamp_utc - dep_timestamp_utc))::INT) * 1.0/COUNT(*) * 100),2) AS match_percent
+FROM (
+	  SELECT MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+	                        DATE_PART('month', flight_date)::INT,
+	                        DATE_PART('day', flight_date)::INT,
+	                        DATE_PART('hour', dep_time_f_utc)::INT,
+	                        DATE_PART('minute', dep_time_f_utc)::INT,
+	                        0) AS dep_timestamp_utc,
+	         MAKE_TIMESTAMP(DATE_PART('year', flight_date)::INT,
+	                        DATE_PART('month', flight_date)::INT,
+	                        CASE WHEN travel_time_f_utc < INTERVAL '0'
+	                             THEN DATE_PART('day', flight_date + INTERVAL '1 day')::INT
+	                             ELSE DATE_PART('day', flight_date)::INT
+                            END,
+                            DATE_PART('hour', arr_time_f_utc)::INT,
+                            DATE_PART('minute', arr_time_f_utc)::INT,
+                            0) AS arr_timestamp_utc,
+             actual_elapsed_time_f
+      FROM (
+            SELECT flight_date,
+                   dep_time_f - origin_tz AS dep_time_f_utc,
+                   arr_time_f - dest_tz AS arr_time_f_utc,
+                   actual_elapsed_time_f,
+                   (arr_time_f - dest_tz) - (dep_time_f - origin_tz) AS travel_time_f_utc
+	        FROM (
+	              SELECT flight_date,
+	                     MAKE_INTERVAL(mins => (a.tz*60)::INT) AS origin_tz,
+	                     MAKE_INTERVAL(mins => (a2.tz*60)::INT) AS dest_tz,
+	                     MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS dep_time_f,
+	                     MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) AS arr_time_f,
+	                     MAKE_INTERVAL(mins => actual_elapsed_time::INT) AS actual_elapsed_time_f,
+	                     MAKE_TIME((arr_time::INT / 100), (arr_time::INT % 100), 0) - MAKE_TIME((dep_time::INT / 100), (dep_time::INT % 100), 0) AS travel_time_f
+	              FROM flights f
+	              LEFT JOIN airports AS a
+	                     ON f.origin=a.faa
+	              LEFT JOIN airports AS a2
+	                     ON f.dest=a2.faa
+	             ) AS f
+	       ) AS ff
+     ) AS fff;
