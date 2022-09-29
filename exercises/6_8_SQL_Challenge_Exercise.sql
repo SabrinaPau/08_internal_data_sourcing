@@ -72,7 +72,7 @@
  *
  * 7.1 We managed to increase the rate of matching records, but it's still not at 100%.
  *     Could overnight flights be an issue?
- *     What's special about values in the travel_time_f_utc column for overnight flights?
+ *     What is special about values in the travel_time_f_utc column for overnight flights?
  *     Please provide the answer below.
  */
 
