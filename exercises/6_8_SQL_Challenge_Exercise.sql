@@ -63,7 +63,7 @@
  *     Please provide the query below.
  */
 
-/* 6.3 Again, calculate the percentage of matching records using the new travel_time_f_utc column?
+/* 6.3 Again, calculate the percentage of matching records using the new travel_time_f_utc column
  *     Explain the increase in matching records.
  *     Please provide the query and answer below.
  */
