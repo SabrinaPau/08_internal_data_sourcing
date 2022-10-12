@@ -4,8 +4,8 @@
  *   analysis and giving out business recommendations?
  *   If your answer is no, you're on a good path to becoming an analyst.
  *
- * 1. Using the data in the remaining columns in the flights table, can you think of a way to verify our assumption?
- *    Please provide the answer below.
+ * 1 Using the data in the remaining columns in the flights table, can you think of a way to verify our assumption?
+ *   Please provide the answer below.
  */
 
 /*   Don't worry if you couldn't figure this one out. To verify our assumption, we can calculate the difference between 
@@ -14,7 +14,7 @@
 
 /* 2.1 The first step is to become familiar with the dep_time, arr_time and actual_elapsed_time columns.
  *     Based on the column names and what you already know from previous exercises about the information that is stored 
- *     in these three columns, what are your assumptions about the data type of the values?
+ *     in these three columns, what are your assumptions about the data types of the values?
  */
 
 /* 2.2 Retrieve all unique values from these columns in three separate queries and order them in descending order.
@@ -38,11 +38,14 @@
  *   Please provide the query below.
  */
 
-/* 5.1 Again, calculate the difference, this time using dep_time_f and arr_time_f, as flight duration and call it travel_time_f.
+/* 5.1 Querying the raw columns next to the ones we have transformed, makes it a lot easier to compare the result to the input.
+ *     This allows for quick prototyping and debugging and helps to understand how functions work. 
+ *     To optimize our query in terms of performance and readability, we can always remove unneccessary columns in the end. 
+ *     Use the previous query and calculate the difference of arr_time_f and dep_time_f and call it flight_duration_f.
  * 	   Please provide the query below.
  */
 
-/* 5.2 Compare the calculated flight duration values in travel_time_f with the values in the actual_elapsed_time_f column and 
+/* 5.2 Compare the calculated flight duration values in flight_duration_f with the values in the actual_elapsed_time_f column and 
  * 	   calculate the percentage of values that are equal in both columns.
  * 	   Please provide the query below.
  */
@@ -59,25 +62,25 @@
  */
 
 /* 6.2 Use the time zone columns to convert dep_time_f and arr_time_f to UTC and call them dep_time_f_utc and arr_time_f_utc.
- * 	   Calculate the difference of both columns and call it travel_time_f_utc.
+ * 	   Calculate the difference of both columns and call it flight_duration_f_utc.
  *     Please provide the query below.
  */
 
-/* 6.3 Again, calculate the percentage of matching records using the new travel_time_f_utc column
+/* 6.3 Again, calculate the percentage of matching records using the new flight_duration_f_utc column.
+ *     Try to round the result to two decimals.
  *     Explain the increase in matching records.
  *     Please provide the query and answer below.
  */
 
 /* Bonus Challenge
  *
- * 7.1 We managed to increase the rate of matching records, but it's still not at 100%.
+ * 7.1 We managed to increase the rate of matching records to >80%, but it's still not at 100%.
  *     Could overnight flights be an issue?
- *     What is special about values in the travel_time_f_utc column for overnight flights?
+ *     What is special about values in the flight_duration_f_utc column for overnight flights?
  *     Please provide the answer below.
  */
 
 /* 7.2 Calculate the total number of flights that arrived after midnight UTC.
- *     Hint: I think it's time to go and buy some stamps.
  *     Please provide the query below.
  */
 
