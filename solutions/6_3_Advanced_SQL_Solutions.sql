@@ -85,6 +85,20 @@ FULL JOIN airports a
 
 --> differences in the number of airport codes between flights (origin) and airports (faa)
 
+/* N.B.: if no primary key between tables are available or enough to join two tables, we can add as many keys as necessary in the JOIN.
+Example: if we did not have a code to join the airports and flights tables, but only the city name. 
+We could run into issues e.g. Paris, France and Paris, Texas in the USA.
+Therefore, in that case, we could use 2 keys to distinguish the two.
+The requirement would be that both airports and flights table contain a field "city" and a field "country"
+See the example below:
+/*/
+
+SELECT COUNT(*)
+FROM flights f
+FULL JOIN airports a
+	   ON f.origin_city = a.city 
+	   AND f.origin_country = a.country;
+
 
 /* Q3.1 Filter the data to January 1, 2021 and count all rows for that day so that your result set has two columns: flight_date, total_flights.  
  * 		Repeat this step, but this time only include data from January 2, 2021.
