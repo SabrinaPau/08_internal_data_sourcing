@@ -32,17 +32,17 @@
 
 SELECT DISTINCT arr_time
 FROM flights f
-ORDER BY 1 DESC;
+ORDER BY arr_time DESC;
 -- arr_time is stored as a hundred or thousand number
 
 SELECT DISTINCT dep_time
 FROM flights f
-ORDER BY 1 DESC;
+ORDER BY dep_time DESC;
 -- dep_time is stored as a hundred or thousand number
 
 SELECT DISTINCT actual_elapsed_time 
 FROM flights f
-ORDER BY 1 DESC;
+ORDER BY actual_elapsed_time DESC;
 -- actual_elapsed_time is stored in minutes as INT/FLOAT
 
 /* 3.1 Next, calculate the difference of dep_time and arr_time and call it flight_duration.
