@@ -16,7 +16,7 @@ Activate your new environment by typing:
 
 Add the new modules to your environment:  
 ```conda install -n nf_sql -c conda-forge python-dotenv```  
-```conda install -n nf_sql sqlalchemy```  
+```conda install -n nf_sql sqlalchemy=1.4.46```  
 ```conda install -n nf_sql -c conda-forge psycopg2```
 
 Please work in pairs through all the notebooks in this particular order: 
