@@ -6,8 +6,23 @@ The two main tools of Data Analysts are SQL and Python. Internal data is often s
 ## Tasks
 Follow the lectures to work through the code-alongs and exercises using dbeaver.
 
-As a final step we will return to working in jupyter notebooks. At this point follow the below instructions:  
+As a final step we will return to working in jupyter notebooks. At this point follow the below instructions: 
 
+For the Data Part-Time bootcamp:  
+Create a new virtual environment in your repository based on:
+```pyenv local 3.11.3``` 
+```python -m venv .venv```  
+```source .venv/bin/activate```  
+```pip install --upgrade pip```  
+```pip install jupyterlab```  
+```pip install```  
+```pandas pip```  
+```pip install python-dotenv```  
+```pip install sqlalchemy==1.4.39```   
+```pip install psycopg2-binary```  
+
+ 
+For the Data Analytics boootcamp:  
 Create a new conda environment by cloning your nf_base environment.   
 ```conda create --clone nf_base --name nf_sql```  
 
