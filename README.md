@@ -10,7 +10,7 @@ As a final step we will return to working in jupyter notebooks. At this point fo
 
 For the Data Part-Time bootcamp:  
 Create a new virtual environment in your repository based on:  
-```pyenv local 3.11.3``` 
+```pyenv local 3.11.3```  
 ```python -m venv .venv```  
 ```source .venv/bin/activate```  
 ```pip install --upgrade pip```  
@@ -22,7 +22,7 @@ Create a new virtual environment in your repository based on:
 ```pip install psycopg2-binary```  
 
  
-For the Data Analytics boootcamp:  
+For the Data Analytics bootcamp:  
 Create a new conda environment by cloning your nf_base environment.   
 ```conda create --clone nf_base --name nf_sql```  
 
