@@ -9,7 +9,7 @@ Follow the lectures to work through the code-alongs and exercises using dbeaver.
 As a final step we will return to working in jupyter notebooks. At this point follow the below instructions: 
 
 For the Data Part-Time bootcamp:  
-Create a new virtual environment in your repository based on:
+Create a new virtual environment in your repository based on:  
 ```pyenv local 3.11.3``` 
 ```python -m venv .venv```  
 ```source .venv/bin/activate```  
