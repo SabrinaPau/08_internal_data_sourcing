@@ -15,8 +15,7 @@ Create a new virtual environment in your repository based on:
 ```source .venv/bin/activate```  
 ```pip install --upgrade pip```  
 ```pip install jupyterlab```  
-```pip install```  
-```pandas pip```  
+```pip install pandas```  
 ```pip install python-dotenv```  
 ```pip install sqlalchemy==1.4.39```   
 ```pip install psycopg2-binary```  
