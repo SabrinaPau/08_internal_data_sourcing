@@ -1,5 +1,0 @@
-host='data-analytics-course-2.c8g8r1deus2v.eu-central-1.rds.amazonaws.com'
-port='5432'
-database='postgres'
-user=''
-password=''

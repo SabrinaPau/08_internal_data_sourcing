@@ -15,9 +15,26 @@ def get_sql_config():
     return sql_config
 
 # Import sqlalchemy and pandas - do this only when instructed
+import sqlalchemy
+from sql_functions import get_sql_config
+import pandas as pd
 
 # Insert the get_data() function definition below - do this only when instructed in the notebook
+def get_data(sql_query):
+   sql_config = get_sql_config()
+   engine = sqlalchemy.create_engine('postgresql://user:pass@host/database',
+                        connect_args=sql_config
+                        )
+   with engine.begin() as conn:
+      results = conn.execute(sql_query)
+      return results.fetchall()
 
 # Insert the get_dataframe() function definition below - do this only when instructed in the notebook
+def get_dataframe(sql_query):
+    sql_config = get_sql_config()
+    engine = sqlalchemy.create_engine('postgresql://user:pass@host/database',
+                        connect_args=sql_config
+                        )
+    return pd.read_sql_query(sql=sql_query, con=engine)
 
 # Insert the get_engine() function definition below - when instructed

@@ -15,13 +15,17 @@
  
  Important:
  * Don't use CURRENT_TIME but any of the other functions above (https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_use_CURRENT_TIME)
- * Don't use the timestamp type to store timestamps, use timestamptz (also known as timestamp with time zone) instead (https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_use_timestamp_.28without_time_zone.29
+ * Don't use the timestamp type to store timestamps, use timestamp with time zone instead (https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_use_timestamp_.28without_time_zone.29
  */
 
 SELECT NOW() AS timestamp_with_time_zone;
-SELECT CURRENT_TIMESTAMP AS curr_timestamp_with_time_zone;
+SELECT CURRENT_TIMESTAMP AS curr_timestamp_with_time_zone;		-- use this for storing
 SELECT CURRENT_DATE AS curr_date_without_time_zone;
 SELECT LOCALTIME AS local_time_without_time_zone;
+--SELECT pg_typeof(current_timestamp);
+--SELECT pg_typeof(current_time);
+--SELECT pg_typeof(flight_date)
+--FROM flights f ;
 
 /* Date/Time creation
  * 1. make_date(year int, month int, day int) -> date: Create date from year, month and day fields
@@ -142,6 +146,7 @@ SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
 SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
        (DATE '2021-02-01', DATE '2021-02-28');
 
+--------------------------      
 /* Exercises
  * Now it's time to put what you've learned into practice.
  * The following exercises need to be solved using the flights and airports table from the PostgreSQL database 
@@ -152,31 +157,74 @@ SELECT (DATE '2021-01-01', DATE '2021-01-31') OVERLAPS
  * 1. What's the current timestamp with time zone?
  *    Please provide the query below.
  */
+ SELECT current_timestamp AS current_time;
+-- 2024-04-30 10:02:53.072 +0200
 
 /* 2.1 Return the current timestamp and truncate it to the current day.
  *     Please provide the query below.
- */   
+ */  
+SELECT date_trunc('day', current_timestamp) AS trunc_day;
+SELECT DATE_TRUNC('day', now()) AS trunc_day;
 
 /* 2.2 Return a sorted list of all unique flight dates available in the flights table.
  *     Please provide the query below.
  */   
+SELECT DISTINCT flight_date
+FROM flights f
+ORDER BY 1;
 
 /* 2.3 Return a sorted list of all unique flight dates available in the flights table and add 30 days and 12 hours to each date.
  *     Please provide the query below.
  */   
+SELECT DISTINCT flight_date + INTERVAL '30 days, 12 hours' AS flight_added, flight_date
+FROM flights f 
+ORDER BY 1;
 
 /* 3.1 Return the hour of the current timestamp.
  *     Please provide the query below.
  */
+SELECT date_part('hour', now());
+-- 10
 
 /* 3.2 Sum up all unique days of the flight dates available in the flights table.
  *     Please provide the query below.
  */
+SELECT sum(DISTINCT date_part('day', flight_date))
+FROM flights f;
+-- 496
+
+SELECT count(DISTINCT date_part('day', flight_date))
+FROM flights f;
+-- 31
 
 /* 3.3 Split all unique flight dates into three separate columns: year, month, day. 
  *     Use these columns in an outer query and recreate an ordered list of all flight_dates.
  */
+SELECT DISTINCT date_part('year', flight_date) AS year_part,
+		date_part('month', flight_date) AS month_part,
+		date_part('day', flight_date) AS day_part
+FROM flights f;
+
+-------
+SELECT make_date(year_part, month_part, day_part)
+FROM (SELECT DISTINCT date_part('year', flight_date)::INT AS year_part,
+		date_part('month', flight_date)::INT AS month_part,
+		date_part('day', flight_date)::INT AS day_part
+	FROM flights f) AS date_parts
+ORDER BY 1;
+
+---------
+SELECT DISTINCT(CONCAT ((date_part('year', flight_date)),
+		'-', (date_part('month', flight_date)),
+		'-', (date_part('day', flight_date)))::DATE)
+FROM flights f2 
+ORDER BY 1;
 
 /* 4. Convert the current timestamp to UNIX format and back in a single query.
  *    Please provide the query below.
  */      
+SELECT flight_date, 
+    EXTRACT(EPOCH FROM flight_date) AS from_timestamp_to_unix,
+    TO_TIMESTAMP(EXTRACT(EPOCH FROM flight_date)) AS from_unix_to_timestamp 
+FROM 
+    flights f;

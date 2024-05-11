@@ -33,8 +33,7 @@ SELECT *
 FROM airports_part AS ap;
 
 SELECT *
-FROM flights_part fp
-LEFT JOIN airports_part ap
+FROM flights_part fp LEFT JOIN airports_part ap
 	   ON fp.origin = ap.faa;
 
 /* RIGHT JOIN
@@ -42,8 +41,7 @@ LEFT JOIN airports_part ap
  * results in ALL airports with matching flights.
  */
 SELECT * 
-FROM flights_part fp
-RIGHT JOIN airports_part ap
+FROM flights_part fp RIGHT JOIN airports_part ap
 	    ON fp.origin = ap.faa;
 
 /* INNER JOIN
@@ -94,6 +92,11 @@ WHERE a1.city=a2.city
   AND a1.faa<>a2.faa --Filter out self matches
 ORDER BY a1.name;
 
+SELECT e.employee_name AS employee,
+		s.employee_name AS supervisor
+FROM employees e, employees s
+WHERE s.employee_id = e.supervisor_id;
+
 /* UNION [ALL]
  * In this example we select all airports in Hamburg and append all airports from Berlin.
  * We technically don't need UNION in this example and in reality we would always use 
@@ -105,6 +108,18 @@ SELECT faa,
 FROM airports
 WHERE city='Hamburg'
 UNION
+SELECT faa,
+	   name,
+	   city
+FROM airports
+WHERE city='Berlin';
+
+SELECT faa,
+	name,
+	city
+FROM airports
+WHERE city IN ('Hamburg', 'Berlin')
+UNION --ALL
 SELECT faa,
 	   name,
 	   city
@@ -193,9 +208,9 @@ SELECT flight_date,
 			WHEN dep_delay = 0 THEN 'On time'
 			ELSE 'Delayed'
 	   END AS dep_punctuality,
-	   COUNT(*) AS total_flights
+	   COUNT(dep_delay) AS total_flights
 FROM flights
-WHERE flight_date = '2021-01-01'
+WHERE flight_date = '2021-01-01' AND cancelled = 0
 GROUP BY 1,2;
 
 /* COALESCE

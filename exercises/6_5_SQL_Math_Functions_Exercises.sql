@@ -8,10 +8,10 @@
 
 /* Division
  * 1. a / b -> same as input: division (integer division truncates the result)
- * 2. div(y numeric, x numeric) -> numeric: integer quotient of y/x
+ * 2. div(y numeric, x numeric) -> numeric: integer quotient of y/x (floor division)
  */
-SELECT 5.0/2.0 AS five_divided_two;
-SELECT DIV(5.0,2.0) AS five_divided_two_func;
+SELECT 5.0/2.0 AS five_divided_two;				-- 2.5
+SELECT DIV(5.0,2.0) AS five_divided_two_func;	-- 2
 
 /* Modulo
  * 1. % -> same as input: modulo (remainder)
@@ -96,50 +96,61 @@ SELECT TRUNC(-5.9) AS trunc_neg_number;
  * 	  SELECT 1 / 2;
  *    Please provide the answer below.
  */
+-- 0		if: SELECT 1.0 / 2.0 => 0.5
 
 /* 2. What's the output of the following SQL statement?
  *    SELECT 1 / 2.0;
  *    Please provide the answer below.
  */
+-- 0.5
 
 /* 3. What's the output of the following SQL statement?
- *    SELECT DIV(1.0 / 2.0);
+ *    SELECT DIV(1.0,2.0);
  *    Please provide the answer below.
  */
+-- 0
 
 /* 4. What's the output of the following SQL statement?
  *    SELECT 2^2^2;
  *    Please provide the answer below.
  */
+-- 16
 
 /* 5. What's the output of the following SQL statement?
  *    SELECT POWER(2, 2, 2);
  *    Please provide the answer below.
  */
+-- error: you cannot do it twice!
+-- but you can do it this way: SELECT POWER (2, 2^2)
 
 /* 6. What's the output of the following SQL statement?
  *    SELECT 5 % 6;
  *    Please provide the answer below.
  */
+-- 5
 
 /* 7. What's the output of the following SQL statement?
  *    SELECT MOD(5.0,6.0);
  *    Please provide the answer below.
  */
+-- 5
+
 
 /* 8. What's the output of the following SQL statement?
  *    SELECT SQRT(FACTORIAL(SIGN(@SIGN(-5))::INT));
  *    Please provide the answer below.
  */
+-- 1
 
 
 /* 9. What's the output of the following SQL statement?
  * 	  SELECT @(2.5 / (CEIL(RANDOM())*-5));
  * 	  Please provide the answer below.
  */
+-- 0.5
 
 /* 10. What's the output of the following SQL statement?
  *     SELECT |/(MOD(CAST(SIGN(-1337.66) + POWER(3, 3) - (FACTORIAL(3) % 5) AS INT), 20) + 4);
  * 	   Please provide the answer below.
  */
-
+-- 3

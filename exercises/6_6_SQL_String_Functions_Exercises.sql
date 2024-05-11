@@ -31,7 +31,7 @@ SELECT STARTS_WITH('neuefische', 'neu') AS string_position;
  * String repetition
  * repeat(string text, number int) -> text: Repeat string the specified number of times
  */
-SELECT REPEAT('neu', 5) AS string_repetition;
+SELECT REPEAT('hi', 5) AS string_repetition;
 
 /* String concatenation
  * 1. string || string -> text: String concatenation
@@ -39,9 +39,9 @@ SELECT REPEAT('neu', 5) AS string_repetition;
  * 3. concat_ws(sep text, str "any" [, str "any" [, ...] ]) -> text: Concatenate all but the first argument with separators. The first argument is used as the separator string. NULL arguments are ignored.
  * 4. format(formatstr text [, formatarg "any" [, ...] ]) -> text: Format arguments according to a format string.
  */
-SELECT 'neue' || 'fische ' || 2021 AS string_concat;
-SELECT CONCAT('neue', 'fische ', NULL, 2021) AS string_concat;
-SELECT CONCAT_WS(' ', 'neue', 'fische', 2021) AS string_concat_ws;
+SELECT 'neue' || 'fische ' || 2024 AS string_concat;
+SELECT CONCAT('neue', 'fische ', NULL, 2024) AS string_concat;		-- NULL IS ignored
+SELECT CONCAT_WS(' ', 'neue', 'fische', 2024) AS string_concat_ws;
 SELECT FORMAT('The best course is %s, at %s!', 'Data Analytics', 'neuefische') AS string_format;
 
 /* String padding
@@ -55,7 +55,7 @@ SELECT RPAD('He', 8, 'llo') AS string_right_fill;
  * String reversing
  * reverse(str) -> text: Return reversed string.
  */
-SELECT REVERSE('1202 ehcsifeuen') AS string_reversed;
+SELECT REVERSE('4202 ehcsifeuen') AS string_reversed;
 
 /* String letter case
  * 1. lower(string) -> text: Convert string to lower case
@@ -115,13 +115,16 @@ SELECT SUBSTRING('neuefische' FROM 5 FOR 5) AS string_substring;
 SELECT SUBSTRING('neuefische' FROM '......$') AS string_substring;
 SELECT SUBSTRING('neuefische' FROM '%#"f_sch#"_' FOR '#') AS string_substring;
 SELECT REGEXP_MATCH('neuefische',  '(neue)(fische)') AS string_regexp;
-SELECT REGEXP_MATCHES('neueneuefische',  'n..', 'g') AS string_regexp;
+SELECT REGEXP_MATCHES('neueneueneofische',  'n..', 'g') AS string_regexp;
 
 /* Extraction by splitting
  * split_part(string text, delimiter text, field int) -> text: Split string on delimiter and return the given field (counting from one)
  */
-SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
+SELECT SPLIT_PART('neue-fische-2024', '-', 3) AS string_split;
 
+
+
+-----------------------------------------------------------
 /* Exercises
  * Now it's time to put what you've learned into practice.
  * The following exercises need to be solved using the airports table from the PostgreSQL database you've already worked with.
@@ -132,45 +135,124 @@ SELECT SPLIT_PART('neue-fische-2021', '-', 3) AS string_split;
  *    Please provide the query and answer below.
  */
 
+SELECT length(name) AS string_length, name, city, country
+FROM airports a
+WHERE length(name) = (SELECT max(length(name)) FROM airports)
+ORDER BY 1 DESC;
+-- Guarulhos - Governador André Franco Montoro International Airport: 65
+
 /* 2. The names of how many airports start with the letter 'X'?
  *    Please provide the query and answer below.
  */
+SELECT count(name LIKE 'X%')
+FROM airports a 
+WHERE name LIKE 'X%';
+-- 17
+
+---
+SELECT count(name LIKE 'X%')
+FROM airports a 
+WHERE starts_with(name, 'X');
 
 /* 3. How many airports have 'X' as the second letter in their airport code (column: faa)?
  *    Run the 3 queries below and explain why the results are different and which result is correct.
  */
 SELECT COUNT(*)
 FROM airports
-WHERE STRPOS(faa, 'X') = 2;
+WHERE STRPOS(faa, 'X') = 2;		-- RETURNS the FIRST POSITION the CHARACTER IS AND doesn't CHECK the remaining letters
+-- 142
 
 SELECT COUNT(*)
 FROM airports
 WHERE faa LIKE '_X_';
+-- 143 => the correct one!
 
 SELECT COUNT(*)
 FROM airports
-WHERE faa LIKE '%X%';
+WHERE faa LIKE '%X%';			-- X somewhere IN the airport code (even at the beginning or at the end)
+-- 356
+
+
+--------
+--------
+
+SELECT faa
+FROM airports
+WHERE faa LIKE '_X_'
+
+EXCEPT
+
+SELECT faa
+FROM airports
+WHERE STRPOS(faa, 'X') = 2;
+
+-- XXN
+
+SELECT strpos('XXN', 'X')
+-- 1	finds the x on the first position and doesn't look further
+
+--------
+--------
 
 /* 4. Combine the 'faa' and 'name' column in the airports table so that your output looks as follows: 'faa - name'.
  *    Please provide the query below.
  */
+SELECT concat(faa, ' - ', name) AS "Airport Code and Name"
+FROM airports a 
 
 /* 5. How many airports have a palindrome as their airport code?
  *    Please provide the query and answer below.
  */
+SELECT faa, name, city,
+		COUNT(*) OVER (ORDER BY name, city) AS running_total_airports
+FROM airports a 
+WHERE reverse(faa) = faa
+GROUP BY 1, 2, 3
+ORDER BY 4;
+-- 244
 
 /* 6. Return all unique country and cities combinations showing country name in upper case and city name in lowercase.
  *    Please provide the query below.
  */
+SELECT DISTINCT upper(country), lower (city)
+FROM airports a
+ORDER BY upper(country);
+
+SELECT DISTINCT concat(lower(city), ' - ', upper(country))
+FROM airports a;
 
 /* 7. In how many airports does the first letter of the city match the first letter of the airport name?
  *    Please provide the query and answer below.
  */
+--SELECT city, name
+SELECT count(name)
+FROM airports a 
+WHERE left(city, 1) = left(name, 1);
+-- 4337
 
 /* 8. How many airport names contain the name of the city in which they are located?
  * 	  Bonus: What's the percentage compared to all airports in the list?
  *    Please provide the query and answer below.
  */
+--SELECT city, name
+SELECT count(*)
+FROM airports a
+WHERE POSITION(lower(city) IN lower(name)) > 0;
+-- 3785
+
+
+--SELECT city, name
+SELECT count(*)
+FROM airports
+WHERE lower(name) LIKE '%' || lower(city) || '%';
+
+SELECT 
+    count(*) AS airports_with_city_name,
+    round((count(*) * 100.0 / (SELECT count(*) FROM airports)), 2) AS percentage
+FROM airports
+WHERE lower(name) LIKE '%' || lower(city) || '%';
+--62,34%
+
 
 /* 9. Perform all of the following steps in ONE query:
  *    1. Query the 'lat' and 'lon' column with only one decimal using string functions
@@ -178,10 +260,27 @@ WHERE faa LIKE '%X%';
  * 	  3. Split the column into two columns called lat and lon again
  *    Please provide the query and answer below.
  */
+SELECT
+    CONCAT(CAST(lat AS DECIMAL(8, 1)), ' ; ', CAST(lon AS DECIMAL(8, 1))) AS lat_lon_combined,
+    SPLIT_PART(CONCAT(CAST(lat AS DECIMAL(8, 1)), ';', CAST(lon AS DECIMAL(8, 1))), ';', 1) AS extracted_lat,
+    SPLIT_PART(CONCAT(CAST(lat AS DECIMAL(8, 1)), ';', CAST(lon AS DECIMAL(8, 1))), ';', 2) AS extracted_lon
+FROM airports a;
+
 
 /* 10. Return a list of unique country names from the airports table that have 'land' in their name but NOT 'Island'.
  *	   Take this list and replace the string 'land' with 'sea'
  *	   Which of the newly created country names do you find the funniest?
  *     Please provide the query and answer below.
  */
+SELECT DISTINCT country
+FROM airports a 
+WHERE (lower(country) LIKE '%land') AND (lower(country) NOT LIKE '%island');
 
+SELECT DISTINCT country,
+		(SELECT REPLACE(lower(country), '%land', '%sea') FROM airports a2) AS funny_countries
+FROM airports a 
+WHERE (lower(country) LIKE '%land') AND (lower(country) NOT LIKE '%island');
+
+
+
+SELECT REPLACE('neuefische', 'e', '') AS string_replace;

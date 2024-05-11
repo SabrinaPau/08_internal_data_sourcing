@@ -16,7 +16,7 @@
 
  * The lecture will cover a lot of SQL commands, but don't worry we have a lot of practical exercises prepared for you.
  * With the exercises you will build up your SQL skills in no time! 
- */ 
+ */
 
 -- Your first SQL query
 SELECT name
@@ -256,10 +256,10 @@ SELECT country,
 	   tz AS timezone,
 	   COUNT(*) AS total_airports
 FROM airports
-WHERE country = 'United States'
+WHERE country = 'United States' OR country = 'Germany'
 GROUP BY country,
 		 tz
-ORDER BY tz;
+ORDER BY country DESC, tz;
 
 /* Refererencing columns by their index is also possible with GROUPY BY.
  * The query below returns the same output as the query above.
@@ -268,9 +268,9 @@ SELECT country,
 	   tz AS timezone,
 	   COUNT(*) AS total_airports
 FROM airports
-WHERE country = 'United States'
+WHERE country = 'United States' OR country = 'Germany'
 GROUP BY 1, 2 -- 1 refers to country and 2 to tz
-ORDER BY 2;
+ORDER BY 1 DESC, 2;
 
 /* Average altitude of airports per country with AVG()
  * The ROUND() function rounds the value to the specified decimal
@@ -311,7 +311,7 @@ ORDER BY AVG(alt) DESC;
 
 -- Commenting out parts of your query
 SELECT faa,
-	   name,
+	   name --,
 	   --country
 FROM airports
 /*WHERE faa LIKE 'A%'
